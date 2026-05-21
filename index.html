@@ -1,188 +1,1152 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta name="google-adsense-account" content="ca-pub-2949723081387241">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQoong Package</title>
-    <style>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-adsense-account" content="ca-pub-2949723081387241">
+  <title>AQoong Packages — Flutter & Android Developer Libraries</title>
+  <meta name="description" content="Open-source Flutter and Android packages by AQoong. Includes virtual keyboard widget, ripple container, size-tailored text, color palette tools, and custom lint rules.">
+  <meta name="keywords" content="Flutter, Android, package, pub.dev, open source, widget, keyboard, ripple, lint">
+  <meta name="author" content="AQoong">
+  <meta property="og:title" content="AQoong Packages — Flutter & Android Developer Libraries">
+  <meta property="og:description" content="Open-source Flutter and Android packages by AQoong.">
+  <meta property="og:url" content="https://aqoong.pe.kr">
+  <meta property="og:type" content="website">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2949723081387241" crossorigin="anonymous"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --bg-surface: #161b22;
+      --bg-card: #21262d;
+      --bg-elevated: #2d333b;
+      --border: #30363d;
+      --border-subtle: #21262d;
+      --accent: #58a6ff;
+      --accent-dim: #1f3b5e;
+      --green: #3fb950;
+      --green-dim: #1a3b22;
+      --amber: #e3b341;
+      --amber-dim: #3d2f0a;
+      --purple: #bc8cff;
+      --coral: #ff7b72;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --text-dim: #6e7681;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --radius: 8px;
+      --radius-lg: 12px;
+      --font-head: 'Outfit', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
     body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
+
+    /* ---- SCROLLBAR ---- */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ---- NAV ---- */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13,17,23,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
-    th, td {
-      border: 1px solid #ddd;
-      text-align: left;
-      padding: 8px;
+    .nav-brand {
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
     }
-    th {
-      background-color: #f4f4f4;
+    .nav-brand span { color: var(--accent); }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.15s;
     }
-    tr:hover {
-      background-color: #f1f1f1;
+    .nav-links a:hover { color: var(--text); }
+    @media (max-width: 600px) { .nav-links { display: none; } }
+
+    /* ---- HERO ---- */
+    .hero {
+      padding: 5rem 2rem 4rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(88,166,255,0.25);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+      font-family: var(--font-mono);
+    }
+    .hero h1 {
+      font-family: var(--font-head);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .hero p {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 580px;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+    .hero-links { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.15s;
       cursor: pointer;
     }
-    tr a {
-      color: inherit;
-      text-decoration: none;
+    .btn-primary {
+      background: var(--accent);
+      color: #0d1117;
+      border: 1px solid transparent;
     }
+    .btn-primary:hover { background: #79b8ff; }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: var(--bg-card); border-color: var(--text-muted); }
+
+    /* ---- STAT STRIP ---- */
+    .stats {
+      max-width: 900px;
+      margin: 0 auto 3rem;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
+      gap: 1px;
+      background: var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+    }
+    .stat-item {
+      background: var(--bg-surface);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .stat-item .num {
+      font-family: var(--font-head);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+    .stat-item .label {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ---- SECTION ---- */
+    .section { max-width: 900px; margin: 0 auto; padding: 0 2rem 5rem; }
+    .section-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .section-header h2 {
+      font-family: var(--font-head);
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .section-header p { color: var(--text-muted); font-size: 14px; }
+
+    /* ---- PACKAGE CARD ---- */
+    .pkg-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    .pkg-header {
+      padding: 1.5rem 1.75rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .pkg-meta { display: flex; flex-direction: column; gap: 6px; }
+    .pkg-name-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .pkg-name {
+      font-family: var(--font-head);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .badge-flutter { background: rgba(63,185,80,0.12); color: var(--green); border: 1px solid rgba(63,185,80,0.25); }
+    .badge-android { background: rgba(227,179,65,0.12); color: var(--amber); border: 1px solid rgba(227,179,65,0.25); }
+    .badge-mit { background: var(--bg-elevated); color: var(--text-muted); border: 1px solid var(--border); }
+    .pkg-desc { color: var(--text-muted); font-size: 14.5px; max-width: 520px; }
+    .pkg-badges { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-start; }
+
+    .pkg-body { padding: 1.75rem; display: flex; flex-direction: column; gap: 1.75rem; }
+
+    /* ---- PLATFORMS ---- */
+    .platforms { display: flex; gap: 6px; flex-wrap: wrap; }
+    .platform-chip {
+      font-size: 12px;
+      font-family: var(--font-mono);
+      padding: 3px 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-muted);
+    }
+
+    /* ---- SUB-SECTION ---- */
+    .sub { display: flex; flex-direction: column; gap: 10px; }
+    .sub-title {
+      font-family: var(--font-head);
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-dim);
+    }
+
+    /* ---- CODE BLOCK ---- */
+    .code-block {
+      background: var(--bg);
+      border: 1px solid var(--code-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .code-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 14px;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .code-lang {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .copy-btn {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--text-dim);
+      background: none;
+      border: 1px solid var(--border);
+      padding: 3px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .copy-btn:hover { color: var(--text); border-color: var(--text-muted); }
+    pre {
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text);
+      tab-size: 2;
+    }
+    pre .kw { color: #ff7b72; }   /* keywords */
+    pre .fn { color: #d2a8ff; }   /* functions/types */
+    pre .st { color: #a5d6ff; }   /* strings */
+    pre .cm { color: #8b949e; }   /* comments */
+    pre .nu { color: #79c0ff; }   /* numbers */
+    pre .cn { color: #ffa657; }   /* constants/params */
+    pre .op { color: #ff7b72; }   /* operators */
+
+    /* ---- FEATURES LIST ---- */
+    .features { display: flex; flex-direction: column; gap: 8px; }
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .feature-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--green-dim);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+    .feature-icon svg { width: 10px; height: 10px; fill: var(--green); }
+
+    /* ---- PROPS TABLE ---- */
+    .props-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .props-table th {
+      text-align: left;
+      padding: 8px 12px;
+      background: var(--bg-card);
+      color: var(--text-dim);
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .props-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: top;
+      color: var(--text-muted);
+    }
+    .props-table tr:last-child td { border-bottom: none; }
+    .props-table td code {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      background: var(--bg-elevated);
+      padding: 1px 6px;
+      border-radius: 3px;
+      color: var(--accent);
+    }
+    .props-table td .prop-name {
+      font-family: var(--font-mono);
+      color: var(--coral);
+      font-size: 12.5px;
+    }
+    .props-table td .req {
+      font-size: 10px;
+      color: var(--coral);
+      font-weight: 600;
+      margin-left: 4px;
+    }
+    .table-wrap {
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    /* ---- ANDROID GRID ---- */
+    .android-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
+      gap: 1rem;
+    }
+    .android-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .android-card .ac-name {
+      font-family: var(--font-head);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .android-card .ac-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+    .android-card .ac-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--accent);
+      text-decoration: none;
+      margin-top: auto;
+    }
+    .android-card .ac-link:hover { text-decoration: underline; }
+
+    /* ---- DIVIDER ---- */
+    hr { border: none; border-top: 1px solid var(--border-subtle); margin: 0; }
+
+    /* ---- ADSENSE ---- */
+    .ad-slot {
+      background: var(--bg-surface);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      text-align: center;
+      margin: 0 2rem 2rem;
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ---- FOOTER ---- */
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 2.5rem 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-copy { font-size: 13px; color: var(--text-dim); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--text); }
+
+    /* ---- PRIVACY POLICY ---- */
+    #privacy { display: none; }
+    #privacy.active {
+      display: block;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    #privacy h2 {
+      font-family: var(--font-head);
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+    #privacy h3 {
+      font-family: var(--font-head);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ---- SCROLL-IN ANIMATION ---- */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .pkg-section { animation: fadeUp 0.4s ease both; }
+    .pkg-section:nth-child(2) { animation-delay: 0.05s; }
+    .pkg-section:nth-child(3) { animation-delay: 0.10s; }
+    .pkg-section:nth-child(4) { animation-delay: 0.15s; }
+    .pkg-section:nth-child(5) { animation-delay: 0.20s; }
   </style>
-  </head>
-  <body>
-    <h1>Welcome to AQoong's Packages</h1>
-    <p>Here are my published packages:</p>
-    <h3>Flutter</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Package Name</th>
-          <th>Supported Platforms</th>
-          <th>Topic</th>
-          <th>Latest Version</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr data-url="https://pub.dev/packages/flutter_soft_keyboard">
-          <td>flutter_soft_keyboard</td>
-          <td>Android, iOS, Linux, MacOS, Web, Windows</td>
-          <td>UI</td>
-          <td><p data-ke-size="size16"><a
-                href="https://pub.dartlang.org/packages/flutter_soft_keyboard"><img
-                  src="https://img.shields.io/pub/v/flutter_soft_keyboard.svg"
-                  alt="pub package" /></a></p></td>
-        </tr>
-        <tr data-url="https://pub.dev/packages/project_color_palette">
-          <td>project_color_palette</td>
-          <td>Android, iOS, Linux, MacOS, Web, Windows</td>
-          <td>Tool</td>
-          <td><p data-ke-size="size16"><a
-                href="https://pub.dartlang.org/packages/project_color_palette"><img
-                  src="https://img.shields.io/pub/v/project_color_palette.svg"
-                  alt="pub package" /></a></p></td>
-        </tr>
-        <tr data-url="https://pub.dev/packages/ripple_container">
-          <td>ripple_container</td>
-          <td>Android, iOS, Linux, MacOS, Web, Windows</td>
-          <td>UI</td>
-          <td><p data-ke-size="size16"><a
-                href="https://pub.dartlang.org/packages/ripple_container"><img
-                  src="https://img.shields.io/pub/v/ripple_container.svg"
-                  alt="pub package" /></a></p></td>
-        </tr>
-        <tr data-url="https://pub.dev/packages/size_tailored_text">
-          <td>size_tailored_text</td>
-          <td>Android, iOS, Linux, MacOS, Web, Windows</td>
-          <td>UI</td>
-          <td><p data-ke-size="size16"><a
-                href="https://pub.dartlang.org/packages/size_tailored_text"><img
-                  src="https://img.shields.io/pub/v/size_tailored_text.svg"
-                  alt="pub package" /></a></p></td>
-        </tr>
-        <tr data-url="https://pub.dev/packages/aqlinter">
-          <td>aqlinter</td>
-          <td>Android, iOS, Linux, MacOS, Web, Windows</td>
-          <td>Lint</td>
-          <td><p data-ke-size="size16"><a
-                href="https://pub.dartlang.org/packages/aqlinter"><img
-                  src="https://img.shields.io/pub/v/aqlinter.svg"
-                  alt="pub package" /></a></p></td>
-        </tr>
-      </tbody>
-    </table>
+</head>
+<body>
 
-    <h3>Android</h3>
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#"><span>AQ</span>oong</a>
+  <ul class="nav-links">
+    <li><a href="#flutter">Flutter</a></li>
+    <li><a href="#android">Android</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="https://github.com/aqoong" target="_blank" rel="noopener">GitHub ↗</a></li>
+  </ul>
+</nav>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Package Name</th>
-          <th>Supported Platforms</th>
-          <th>Latest Version</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr data-url="https://github.com/aqoong/SlidePhotoViewer">
-          <td>SlidePhotoViewer</td>
-          <td>Android</td>
-          <td><p data-ke-size="size16"><a
-                href="https://jitpack.io/#aqoong/SlidePhotoViewer"><img
-                  src="https://jitpack.io/v/aqoong/SlidePhotoViewer.svg"
-                  alt="jitpack library" /></a></p></td>
-        </tr>
-        <tr data-url="https://github.com/aqoong/ExpandableTextView">
-          <td>ExpandableTextView</td>
-          <td>Android</td>
-          <td><p data-ke-size="size16"><a
-                href="https://jitpack.io/#aqoong/ExpandableTextView"><img
-                  src="https://jitpack.io/v/aqoong/ExpandableTextView.svg"
-                  alt="jitpack library" /></a></p></td>
-        </tr>
-        <tr data-url="https://github.com/aqoong/HashTagEditTextView">
-          <td>HashTagEditTextView</td>
-          <td>Android</td>
-          <td><p data-ke-size="size16"><a
-                href="https://jitpack.io/#aqoong/HashTagEditTextView"><img
-                  src="https://jitpack.io/v/aqoong/HashTagEditTextView.svg"
-                  alt="jitpack library" /></a></p></td>
-        </tr>
-        <tr data-url="https://github.com/aqoong/DynamicIndicator">
-          <td>DynamicIndicator</td>
-          <td>Android</td>
-          <td><p data-ke-size="size16"><a
-                href="https://jitpack.io/#aqoong/DynamicIndicator"><img
-                  src="https://jitpack.io/v/aqoong/DynamicIndicator.svg"
-                  alt="jitpack library" /></a></p></td>
-        </tr>
-        <tr data-url="https://github.com/aqoong/ObjectFlowView">
-          <td>ObjectFlowView</td>
-          <td>Android</td>
-          <td><p data-ke-size="size16"><a
-                href="https://jitpack.io/#aqoong/ObjectFlowView"><img
-                  src="https://jitpack.io/v/aqoong/ObjectFlowView.svg"
-                  alt="jitpack library" /></a></p></td>
-        </tr>
-        <tr data-url="https://github.com/aqoong/TextCheckBoxView">
-          <td>TextCheckBoxView</td>
-          <td>Android</td>
-          <td><p data-ke-size="size16"><a
-                href="https://jitpack.io/#aqoong/TextCheckBoxView"><img
-                  src="https://jitpack.io/v/aqoong/TextCheckBoxView.svg"
-                  alt="jitpack library" /></a></p></td>
-        </tr>
-      </tbody>
-    </table>
+<!-- HERO -->
+<div id="main">
+<section class="hero">
+  <div class="hero-badge">👨‍💻 Android &amp; iOS / Flutter Developer</div>
+  <h1>Open-source packages<br>by <em>AQoong</em></h1>
+  <p>A collection of Flutter and Android packages designed to simplify UI development and improve code quality. All packages are MIT-licensed and actively maintained.</p>
+  <div class="hero-links">
+    <a class="btn btn-primary" href="#flutter">Browse Flutter packages</a>
+    <a class="btn btn-secondary" href="https://github.com/aqoong" target="_blank" rel="noopener">View on GitHub</a>
+  </div>
+</section>
 
-    <hr>
-    <h3>Links</h3>
-    <ul>
-      <li><a href="https://github.com/aqoong" target="_blank">Github</a></li>
-      <li><a href="https://owly-expbook.tistory.com" target="_blank">Tistory
-          Blog</a></li>
-    </ul>
+<!-- STATS -->
+<div class="stats">
+  <div class="stat-item"><span class="num">5</span><span class="label">Flutter packages</span></div>
+  <div class="stat-item"><span class="num">6</span><span class="label">Android libraries</span></div>
+  <div class="stat-item"><span class="num">MIT</span><span class="label">License</span></div>
+  <div class="stat-item"><span class="num">All</span><span class="label">Platforms</span></div>
+</div>
 
-    <hr>
+<!-- AD SLOT (horizontal banner) -->
+<div style="max-width:900px;margin:0 auto 1rem;padding:0 2rem;">
+  <ins class="adsbygoogle"
+    style="display:block"
+    data-ad-client="ca-pub-2949723081387241"
+    data-ad-slot="auto"
+    data-ad-format="auto"
+    data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
 
-    <footer>
-      <p>© 2024 AQoong(cooldnjsdn@gmail.com). All rights reserved.</p>
-      <p>All packages listed here are open-source and distributed under the <a
-          href="https://opensource.org/licenses/MIT" target="_blank">MIT
-          License</a>.</p>
-    </footer>
+<!-- FLUTTER PACKAGES -->
+<section class="section" id="flutter">
+  <div class="section-header">
+    <h2>Flutter Packages</h2>
+    <p>Published on pub.dev · Compatible with Android, iOS, Linux, macOS, Web, Windows</p>
+  </div>
 
-    <script>
-      // Add event listeners to each row
-      document.querySelectorAll("tbody tr").forEach(row => {
-        row.addEventListener("click", () => {
-          const url = row.getAttribute("data-url");
-          if (url) {
-            window.open(url, "_blank"); // Open in a new tab
-          }
-        });
-      });
-    </script>
-  </body>
+  <!-- flutter_soft_keyboard -->
+  <div class="pkg-section" id="pkg-keyboard">
+    <div class="pkg-header">
+      <div class="pkg-meta">
+        <div class="pkg-name-row">
+          <span class="pkg-name">flutter_soft_keyboard</span>
+          <span class="badge badge-flutter">Flutter</span>
+          <span class="badge badge-mit">MIT</span>
+        </div>
+        <p class="pkg-desc">A fully customizable virtual keyboard widget built using a 2D array layout. Ideal for PIN pads, custom alphanumeric inputs, and any app requiring a non-system keyboard.</p>
+      </div>
+      <div class="pkg-badges">
+        <a href="https://pub.dev/packages/flutter_soft_keyboard" target="_blank" rel="noopener">
+          <img src="https://img.shields.io/pub/v/flutter_soft_keyboard.svg" alt="pub package" loading="lazy">
+        </a>
+      </div>
+    </div>
+    <div class="pkg-body">
+
+      <div class="sub">
+        <span class="sub-title">Platform support</span>
+        <div class="platforms">
+          <span class="platform-chip">Android</span>
+          <span class="platform-chip">iOS</span>
+          <span class="platform-chip">Linux</span>
+          <span class="platform-chip">macOS</span>
+          <span class="platform-chip">Web</span>
+          <span class="platform-chip">Windows</span>
+        </div>
+      </div>
+
+      <div class="sub">
+        <span class="sub-title">Installation</span>
+        <div class="code-block">
+          <div class="code-toolbar">
+            <span class="code-lang">yaml</span>
+            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+          </div>
+          <pre><span class="kw">dependencies</span>:
+  flutter_soft_keyboard: ^latest</pre>
+        </div>
+      </div>
+
+      <div class="sub">
+        <span class="sub-title">Basic usage</span>
+        <div class="code-block">
+          <div class="code-toolbar">
+            <span class="code-lang">dart</span>
+            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+          </div>
+          <pre><span class="cm">// 1. Create a controller</span>
+<span class="kw">final</span> keyboardController = <span class="fn">KeyboardInputController</span>();
+
+<span class="cm">// 2. Listen to key events</span>
+keyboardController.<span class="fn">setKeyListener</span>((lastKey, enteredText) {
+  <span class="fn">print</span>(<span class="st">'Last key: </span><span class="cn">$lastKey</span><span class="st">'</span>);
+  <span class="fn">print</span>(<span class="st">'Full text: </span><span class="cn">$enteredText</span><span class="st">'</span>);
+});
+
+<span class="cm">// 3. Define a 2D key layout</span>
+<span class="kw">final</span> keyLayout = [
+  [<span class="fn">VirtualKey</span>(text: <span class="st">'1'</span>), <span class="fn">VirtualKey</span>(text: <span class="st">'2'</span>), <span class="fn">VirtualKey</span>(text: <span class="st">'3'</span>)],
+  [<span class="fn">VirtualKey</span>(text: <span class="st">'4'</span>), <span class="fn">VirtualKey</span>(text: <span class="st">'5'</span>), <span class="fn">VirtualKey</span>(text: <span class="st">'6'</span>)],
+  [<span class="fn">VirtualKey</span>(text: <span class="st">'7'</span>), <span class="fn">VirtualKey</span>(text: <span class="st">'8'</span>), <span class="fn">VirtualKey</span>(text: <span class="st">'9'</span>)],
+];
+
+<span class="cm">// 4. Use the widget</span>
+<span class="fn">SoftKeyboardWidget</span>(
+  width: <span class="nu">400</span>,
+  height: <span class="nu">300</span>,
+  columnSpacing: <span class="nu">4</span>,
+  rowSpacing: <span class="nu">4</span>,
+  keyLayout: keyLayout,
+  keyboardInputController: keyboardController,
+)</pre>
+        </div>
+      </div>
+
+      <div class="sub">
+        <span class="sub-title">Key features</span>
+        <div class="features">
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Define any keyboard layout using a simple 2D array</div>
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Real-time key listener with last key and full entered text</div>
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Customizable column and row spacing</div>
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Explicit width/height control for precise sizing</div>
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Integrates with ripple_container for tap feedback</div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <span class="sub-title">Constructor parameters</span>
+        <div class="table-wrap">
+          <table class="props-table">
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="prop-name">keyLayout</span><span class="req">required</span></td><td><code>List&lt;List&lt;VirtualKey&gt;&gt;</code></td><td>2D array defining the keyboard structure</td></tr>
+              <tr><td><span class="prop-name">keyboardInputController</span><span class="req">required</span></td><td><code>KeyboardInputController</code></td><td>Controller for listening to input events</td></tr>
+              <tr><td><span class="prop-name">width</span></td><td><code>double</code></td><td>Total width of the keyboard widget</td></tr>
+              <tr><td><span class="prop-name">height</span></td><td><code>double</code></td><td>Total height of the keyboard widget</td></tr>
+              <tr><td><span class="prop-name">columnSpacing</span></td><td><code>double</code></td><td>Horizontal spacing between keys (default: 4)</td></tr>
+              <tr><td><span class="prop-name">rowSpacing</span></td><td><code>double</code></td><td>Vertical spacing between rows (default: 4)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sub">
+        <span class="sub-title">Lifecycle</span>
+        <div class="code-block">
+          <div class="code-toolbar">
+            <span class="code-lang">dart</span>
+            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+          </div>
+          <pre><span class="kw">@override</span>
+<span class="kw">void</span> <span class="fn">dispose</span>() {
+  keyboardController.<span class="fn">dispose</span>(); <span class="cm">// Always dispose!</span>
+  <span class="kw">super</span>.<span class="fn">dispose</span>();
+}</pre>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ripple_container -->
+  <div class="pkg-section" id="pkg-ripple">
+    <div class="pkg-header">
+      <div class="pkg-meta">
+        <div class="pkg-name-row">
+          <span class="pkg-name">ripple_container</span>
+          <span class="badge badge-flutter">Flutter</span>
+          <span class="badge badge-mit">MIT</span>
+        </div>
+        <p class="pkg-desc">A versatile Box widget that wraps any child with a customizable ripple (ink splash) effect. Acts as a fully styleable touchable container — a powerful alternative to bare <code style="font-size:12px;background:var(--bg-elevated);padding:1px 5px;border-radius:3px;color:var(--accent)">GestureDetector</code>.</p>
+      </div>
+      <div class="pkg-badges">
+        <a href="https://pub.dev/packages/ripple_container" target="_blank" rel="noopener">
+          <img src="https://img.shields.io/pub/v/ripple_container.svg" alt="pub package" loading="lazy">
+        </a>
+      </div>
+    </div>
+    <div class="pkg-body">
+
+      <div class="sub">
+        <span class="sub-title">Installation</span>
+        <div class="code-block">
+          <div class="code-toolbar">
+            <span class="code-lang">yaml</span>
+            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+          </div>
+          <pre><span class="kw">dependencies</span>:
+  ripple_container: ^latest</pre>
+        </div>
+      </div>
+
+      <div class="sub">
+        <span class="sub-title">Basic usage</span>
+        <div class="code-block">
+          <div class="code-toolbar">
+            <span class="code-lang">dart</span>
+            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+          </div>
+          <pre><span class="fn">RippleContainer</span>(
+  width: <span class="nu">200</span>,
+  height: <span class="nu">100</span>,
+  backgroundColor: <span class="fn">Colors</span>.blueAccent,
+  margin: <span class="kw">const</span> <span class="fn">EdgeInsets</span>.<span class="fn">all</span>(<span class="nu">10</span>),
+  borderRadius: <span class="fn">BorderRadius</span>.<span class="fn">circular</span>(<span class="nu">30</span>),
+  splashColor: <span class="fn">Colors</span>.amber,
+  border: <span class="kw">const</span> <span class="fn">Border</span>.<span class="fn">fromBorderSide</span>(
+    <span class="fn">BorderSide</span>(color: <span class="fn">Colors</span>.grey),
+  ),
+  boxShadow: [
+    <span class="fn">BoxShadow</span>(
+      color: <span class="fn">Colors</span>.black.<span class="fn">withOpacity</span>(<span class="nu">0.5</span>),
+      offset: <span class="kw">const</span> <span class="fn">Offset</span>(<span class="nu">0</span>, <span class="nu">2</span>),
+      blurRadius: <span class="nu">10</span>,
+    ),
+  ],
+  onTap: () => <span class="fn">print</span>(<span class="st">'tapped'</span>),
+  onLongPress: () => <span class="fn">print</span>(<span class="st">'long pressed'</span>),
+  child: <span class="kw">const</span> <span class="fn">Text</span>(<span class="st">'Tap me'</span>),
+)</pre>
+        </div>
+      </div>
+
+      <div class="sub">
+        <span class="sub-title">Key features</span>
+        <div class="features">
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Native Material ripple/splash effect on any container</div>
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Full control over background color, border, border radius</div>
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Box shadow support for elevation effects</div>
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span><code style="font-size:12px">onTap</code> and <code style="font-size:12px">onLongPress</code> callbacks</div>
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Custom splash color for branded interactions</div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <span class="sub-title">Constructor parameters</span>
+        <div class="table-wrap">
+          <table class="props-table">
+            <thead>
+              <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="prop-name">child</span><span class="req">required</span></td><td><code>Widget</code></td><td>The widget placed inside the container</td></tr>
+              <tr><td><span class="prop-name">width</span></td><td><code>double?</code></td><td>Container width; defaults to parent constraints</td></tr>
+              <tr><td><span class="prop-name">height</span></td><td><code>double?</code></td><td>Container height; defaults to child height</td></tr>
+              <tr><td><span class="prop-name">backgroundColor</span></td><td><code>Color?</code></td><td>Background fill color of the container</td></tr>
+              <tr><td><span class="prop-name">borderRadius</span></td><td><code>BorderRadius?</code></td><td>Rounded corners applied to container and ripple</td></tr>
+              <tr><td><span class="prop-name">splashColor</span></td><td><code>Color?</code></td><td>Color of the ripple splash effect</td></tr>
+              <tr><td><span class="prop-name">border</span></td><td><code>Border?</code></td><td>Border drawn around the container</td></tr>
+              <tr><td><span class="prop-name">boxShadow</span></td><td><code>List&lt;BoxShadow&gt;?</code></td><td>Shadow layers for elevation</td></tr>
+              <tr><td><span class="prop-name">margin</span></td><td><code>EdgeInsets?</code></td><td>Outer margin around the container</td></tr>
+              <tr><td><span class="prop-name">onTap</span></td><td><code>VoidCallback?</code></td><td>Called when the container is tapped</td></tr>
+              <tr><td><span class="prop-name">onLongPress</span></td><td><code>VoidCallback?</code></td><td>Called on long press</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- size_tailored_text -->
+  <div class="pkg-section" id="pkg-stt">
+    <div class="pkg-header">
+      <div class="pkg-meta">
+        <div class="pkg-name-row">
+          <span class="pkg-name">size_tailored_text</span>
+          <span class="badge badge-flutter">Flutter</span>
+          <span class="badge badge-mit">MIT</span>
+        </div>
+        <p class="pkg-desc">Automatically scales text to fit the size of its parent widget. Removes the guesswork from responsive typography — set a target font size and the widget adjusts it to fill the available space.</p>
+      </div>
+      <div class="pkg-badges">
+        <a href="https://pub.dev/packages/size_tailored_text" target="_blank" rel="noopener">
+          <img src="https://img.shields.io/pub/v/size_tailored_text.svg" alt="pub package" loading="lazy">
+        </a>
+      </div>
+    </div>
+    <div class="pkg-body">
+
+      <div class="sub">
+        <span class="sub-title">Installation</span>
+        <div class="code-block">
+          <div class="code-toolbar">
+            <span class="code-lang">yaml</span>
+            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+          </div>
+          <pre><span class="kw">dependencies</span>:
+  size_tailored_text: ^latest</pre>
+        </div>
+      </div>
+
+      <div class="sub">
+        <span class="sub-title">Basic usage</span>
+        <div class="code-block">
+          <div class="code-toolbar">
+            <span class="code-lang">dart</span>
+            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+          </div>
+          <pre><span class="cm">// Text automatically scales to fit the parent widget</span>
+<span class="fn">SizedBox</span>(
+  width: <span class="nu">200</span>,
+  height: <span class="nu">60</span>,
+  child: <span class="fn">SizeTailoredText</span>(
+    text: <span class="st">'Hello World'</span>,
+    style: <span class="kw">const</span> <span class="fn">TextStyle</span>(
+      fontSize: <span class="nu">100</span>, <span class="cm">// maximum font size</span>
+      fontWeight: <span class="fn">FontWeight</span>.bold,
+    ),
+  ),
+)</pre>
+        </div>
+      </div>
+
+      <div class="sub">
+        <span class="sub-title">Use case: responsive card title</span>
+        <div class="code-block">
+          <div class="code-toolbar">
+            <span class="code-lang">dart</span>
+            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+          </div>
+          <pre><span class="fn">LayoutBuilder</span>(
+  builder: (context, constraints) {
+    <span class="kw">return</span> <span class="fn">SizeTailoredText</span>(
+      text: userName, <span class="cm">// dynamic text that could be any length</span>
+      style: <span class="kw">const</span> <span class="fn">TextStyle</span>(fontSize: <span class="nu">24</span>),
+    );
+  },
+)</pre>
+        </div>
+      </div>
+
+      <div class="sub">
+        <span class="sub-title">Key features</span>
+        <div class="features">
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Auto-scales font size to fit parent dimensions</div>
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Accepts standard <code style="font-size:12px">TextStyle</code> for full styling control</div>
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Ideal for dashboards, cards, and any variable-length text</div>
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Cross-platform: Android, iOS, Web, Desktop</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- project_color_palette -->
+  <div class="pkg-section" id="pkg-palette">
+    <div class="pkg-header">
+      <div class="pkg-meta">
+        <div class="pkg-name-row">
+          <span class="pkg-name">project_color_palette</span>
+          <span class="badge badge-flutter">Flutter</span>
+          <span class="badge badge-mit">MIT</span>
+        </div>
+        <p class="pkg-desc">A bridge between designers and Flutter developers. Converts a project's color definitions from a CSV file into typed Flutter <code style="font-size:12px;background:var(--bg-elevated);padding:1px 5px;border-radius:3px;color:var(--accent)">Color</code> objects — eliminating manual hex copy-paste and keeping design tokens in sync.</p>
+      </div>
+      <div class="pkg-badges">
+        <a href="https://pub.dev/packages/project_color_palette" target="_blank" rel="noopener">
+          <img src="https://img.shields.io/pub/v/project_color_palette.svg" alt="pub package" loading="lazy">
+        </a>
+      </div>
+    </div>
+    <div class="pkg-body">
+
+      <div class="sub">
+        <span class="sub-title">Installation</span>
+        <div class="code-block">
+          <div class="code-toolbar">
+            <span class="code-lang">yaml</span>
+            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+          </div>
+          <pre><span class="kw">dependencies</span>:
+  project_color_palette: ^latest</pre>
+        </div>
+      </div>
+
+      <div class="sub">
+        <span class="sub-title">CSV format</span>
+        <div class="code-block">
+          <div class="code-toolbar">
+            <span class="code-lang">csv</span>
+            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+          </div>
+          <pre><span class="cm"># colors.csv</span>
+primary,#1A73E8
+secondary,#F5F5F5
+accent,#FF6D00
+error,#B00020
+surface,#FFFFFF</pre>
+        </div>
+      </div>
+
+      <div class="sub">
+        <span class="sub-title">Usage</span>
+        <div class="code-block">
+          <div class="code-toolbar">
+            <span class="code-lang">dart</span>
+            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+          </div>
+          <pre><span class="cm">// Load palette from CSV asset</span>
+<span class="kw">final</span> palette = <span class="kw">await</span> <span class="fn">ProjectColorPalette</span>.<span class="fn">fromCsv</span>(<span class="st">'assets/colors.csv'</span>);
+
+<span class="cm">// Access colors by name</span>
+<span class="fn">Container</span>(
+  color: palette[<span class="st">'primary'</span>],
+  child: <span class="fn">Text</span>(<span class="st">'Brand color'</span>),
+)</pre>
+        </div>
+      </div>
+
+      <div class="sub">
+        <span class="sub-title">Key features</span>
+        <div class="features">
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Designer-developer collaboration via simple CSV files</div>
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Single source of truth for project color tokens</div>
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Eliminates manual hex value copy-paste errors</div>
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Integrates with existing Flutter theming system</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- aqlinter -->
+  <div class="pkg-section" id="pkg-aqlinter">
+    <div class="pkg-header">
+      <div class="pkg-meta">
+        <div class="pkg-name-row">
+          <span class="pkg-name">aqlinter</span>
+          <span class="badge badge-flutter">Flutter</span>
+          <span class="badge badge-mit">MIT</span>
+        </div>
+        <p class="pkg-desc">A curated set of lint rules for Flutter projects. Drop it into your <code style="font-size:12px;background:var(--bg-elevated);padding:1px 5px;border-radius:3px;color:var(--accent)">analysis_options.yaml</code> and get a consistent, opinionated code quality baseline across your entire team.</p>
+      </div>
+      <div class="pkg-badges">
+        <a href="https://pub.dev/packages/aqlinter" target="_blank" rel="noopener">
+          <img src="https://img.shields.io/pub/v/aqlinter.svg" alt="pub package" loading="lazy">
+        </a>
+      </div>
+    </div>
+    <div class="pkg-body">
+
+      <div class="sub">
+        <span class="sub-title">Installation</span>
+        <div class="code-block">
+          <div class="code-toolbar">
+            <span class="code-lang">yaml</span>
+            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+          </div>
+          <pre><span class="kw">dev_dependencies</span>:
+  aqlinter: ^latest</pre>
+        </div>
+      </div>
+
+      <div class="sub">
+        <span class="sub-title">Setup</span>
+        <div class="code-block">
+          <div class="code-toolbar">
+            <span class="code-lang">yaml — analysis_options.yaml</span>
+            <button class="copy-btn" onclick="copyCode(this)">copy</button>
+          </div>
+          <pre><span class="cm"># analysis_options.yaml — in your project root</span>
+include: package:aqlinter/analysis_options.yaml
+
+<span class="cm"># Optionally override specific rules below</span>
+<span class="kw">linter</span>:
+  <span class="kw">rules</span>:
+    prefer_single_quotes: <span class="kw">true</span></pre>
+        </div>
+      </div>
+
+      <div class="sub">
+        <span class="sub-title">Key features</span>
+        <div class="features">
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Opinionated, battle-tested rules for Flutter/Dart codebases</div>
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>One-line include — zero configuration required</div>
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Fully overridable on a per-rule basis</div>
+          <div class="feature-item"><span class="feature-icon"><svg viewBox="0 0 10 10"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#3fb950" stroke-width="1.5" fill="none"/></svg></span>Keeps entire team on the same code style</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- AD SLOT -->
+<div style="max-width:900px;margin:0 auto 1rem;padding:0 2rem;">
+  <ins class="adsbygoogle"
+    style="display:block"
+    data-ad-client="ca-pub-2949723081387241"
+    data-ad-slot="auto"
+    data-ad-format="auto"
+    data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<!-- ANDROID PACKAGES -->
+<section class="section" id="android">
+  <div class="section-header">
+    <h2>Android Libraries</h2>
+    <p>Published on JitPack · Native Android custom views</p>
+  </div>
+  <div class="android-grid">
+    <div class="android-card">
+      <span class="badge badge-android" style="align-self:flex-start;">Android</span>
+      <span class="ac-name">SlidePhotoViewer</span>
+      <p class="ac-desc">A custom view for displaying and sliding through a set of photos with smooth gesture support.</p>
+      <a class="ac-link" href="https://github.com/aqoong/SlidePhotoViewer" target="_blank" rel="noopener">View on GitHub →</a>
+    </div>
+    <div class="android-card">
+      <span class="badge badge-android" style="align-self:flex-start;">Android</span>
+      <span class="ac-name">ExpandableTextView</span>
+      <p class="ac-desc">A text view that can expand and collapse long content, great for article previews and descriptions.</p>
+      <a class="ac-link" href="https://github.com/aqoong/ExpandableTextView" target="_blank" rel="noopener">View on GitHub →</a>
+    </div>
+    <div class="android-card">
+      <span class="badge badge-android" style="align-self:flex-start;">Android</span>
+      <span class="ac-name">HashTagEditTextView</span>
+      <p class="ac-desc">An edit text that auto-highlights hashtag tokens as the user types, with callback support.</p>
+      <a class="ac-link" href="https://github.com/aqoong/HashTagEditTextView" target="_blank" rel="noopener">View on GitHub →</a>
+    </div>
+    <div class="android-card">
+      <span class="badge badge-android" style="align-self:flex-start;">Android</span>
+      <span class="ac-name">DynamicIndicator</span>
+      <p class="ac-desc">A flexible page/step indicator that dynamically adjusts to the number of items and current position.</p>
+      <a class="ac-link" href="https://github.com/aqoong/DynamicIndicator" target="_blank" rel="noopener">View on GitHub →</a>
+    </div>
+    <div class="android-card">
+      <span class="badge badge-android" style="align-self:flex-start;">Android</span>
+      <span class="ac-name">ObjectFlowView</span>
+      <p class="ac-desc">A view that displays a collection of objects in a flowing, word-wrap style layout.</p>
+      <a class="ac-link" href="https://github.com/aqoong/ObjectFlowView" target="_blank" rel="noopener">View on GitHub →</a>
+    </div>
+    <div class="android-card">
+      <span class="badge badge-android" style="align-self:flex-start;">Android</span>
+      <span class="ac-name">TextCheckBoxView</span>
+      <p class="ac-desc">A compound view combining a checkbox with a styled text label for use in forms and settings screens.</p>
+      <a class="ac-link" href="https://github.com/aqoong/TextCheckBoxView" target="_blank" rel="noopener">View on GitHub →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="section-header">
+    <h2>About</h2>
+    <p>Who's behind these packages</p>
+  </div>
+  <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.75rem;display:flex;flex-direction:column;gap:1rem;">
+    <p style="color:var(--text-muted);line-height:1.8;">
+      Hi, I'm <strong style="color:var(--text)">AQoong</strong> — an Android &amp; iOS / Flutter developer based in Korea.
+      I build open-source packages to solve real problems I've encountered in production apps.
+      All packages are MIT-licensed, free to use, and open to contributions.
+    </p>
+    <p style="color:var(--text-muted);line-height:1.8;">
+      If a package saves you time, consider starring the repo on GitHub.
+      Bug reports and pull requests are always welcome.
+    </p>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:0.5rem;">
+      <a class="btn btn-secondary" href="https://github.com/aqoong" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn btn-secondary" href="https://owly-expbook.tistory.com" target="_blank" rel="noopener">Tech Blog</a>
+      <a class="btn btn-secondary" href="mailto:cooldnjsdn@gmail.com">Email</a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /#main -->
+
+<!-- PRIVACY POLICY (hidden section, revealed by footer link) -->
+<section id="privacy">
+  <h2>Privacy Policy</h2>
+  <p>Last updated: 2024</p>
+  <h3>Overview</h3>
+  <p>This website (aqoong.pe.kr) serves as a documentation and showcase site for open-source packages developed by AQoong. We take your privacy seriously.</p>
+  <h3>Information We Collect</h3>
+  <p>This site does not directly collect any personal information. We use Google AdSense to display advertisements, which may use cookies to show personalized ads based on your browsing history.</p>
+  <h3>Google AdSense</h3>
+  <p>We use Google AdSense to serve ads on this website. Google may use cookies and web beacons to serve ads based on a user's prior visits. You can opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" style="color:var(--accent)">Google's Ads Settings</a>.</p>
+  <h3>Analytics</h3>
+  <p>This site may use Google Analytics to understand visitor behavior. This data is anonymous and aggregated. No personally identifiable information is collected.</p>
+  <h3>Contact</h3>
+  <p>For privacy-related questions, contact: <a href="mailto:cooldnjsdn@gmail.com" style="color:var(--accent)">cooldnjsdn@gmail.com</a></p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-copy">© 2024 AQoong (cooldnjsdn@gmail.com). All packages MIT licensed.</span>
+  <div class="footer-links">
+    <a href="https://github.com/aqoong" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://owly-expbook.tistory.com" target="_blank" rel="noopener">Blog</a>
+    <a href="#" onclick="togglePrivacy(event)">Privacy Policy</a>
+  </div>
+</footer>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.closest('.code-block').querySelector('pre');
+  const text = pre.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'copied!';
+    setTimeout(() => btn.textContent = 'copy', 1500);
+  });
+}
+
+function togglePrivacy(e) {
+  e.preventDefault();
+  const el = document.getElementById('privacy');
+  el.classList.toggle('active');
+  if (el.classList.contains('active')) {
+    el.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+</script>
+
+</body>
 </html>
