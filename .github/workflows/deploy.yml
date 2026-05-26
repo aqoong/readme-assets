@@ -50,7 +50,7 @@ jobs:
           cp ads.txt build/web/ads.txt
 
       - name: Deploy to gh-pages branch
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         run: |
           cd build/web
           git init
