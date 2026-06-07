@@ -35,23 +35,60 @@ class AQoongApp extends StatelessWidget {
           ),
         ),
       ),
-      routes: {
-        SiteRoute.home.path: (_) => const HomePage(),
-        SiteRoute.packages.path: (_) => const PackagesPage(),
-        '${SiteRoute.packages.path}/': (_) => const PackagesPage(),
-        SiteRoute.jsonParser.path: (_) => const JsonParserPage(),
-        '${SiteRoute.jsonParser.path}/': (_) => const JsonParserPage(),
-        SiteRoute.guide.path: (_) => const GuidePage(),
-        '${SiteRoute.guide.path}/': (_) => const GuidePage(),
-        SiteRoute.about.path: (_) => const AboutPage(),
-        '${SiteRoute.about.path}/': (_) => const AboutPage(),
-        SiteRoute.privacy.path: (_) => const PrivacyPage(),
-        '${SiteRoute.privacy.path}/': (_) => const PrivacyPage(),
-      },
-      onUnknownRoute: (_) => MaterialPageRoute<void>(
-        builder: (_) => const HomePage(),
-        settings: RouteSettings(name: SiteRoute.home.path),
-      ),
+      onGenerateRoute: _buildRoute,
+      onUnknownRoute: (_) =>
+          _animatedRoute(SiteRoute.home.path, const HomePage()),
     );
   }
+}
+
+Route<void> _buildRoute(RouteSettings settings) {
+  final path = _normalizePath(settings.name);
+
+  return _animatedRoute(path, switch (path) {
+    '/' => const HomePage(),
+    '/packages' => const PackagesPage(),
+    '/json-parser' => const JsonParserPage(),
+    '/guide' => const GuidePage(),
+    '/about' => const AboutPage(),
+    '/privacy' => const PrivacyPage(),
+    _ => const HomePage(),
+  });
+}
+
+String _normalizePath(String? path) {
+  if (path == null || path.isEmpty) {
+    return SiteRoute.home.path;
+  }
+  if (path.length > 1 && path.endsWith('/')) {
+    return path.substring(0, path.length - 1);
+  }
+  return path;
+}
+
+PageRouteBuilder<void> _animatedRoute(String path, Widget page) {
+  return PageRouteBuilder<void>(
+    pageBuilder: (_, _, _) => page,
+    settings: RouteSettings(name: path),
+    transitionDuration: const Duration(milliseconds: 260),
+    reverseTransitionDuration: const Duration(milliseconds: 200),
+    transitionsBuilder: (_, animation, _, child) {
+      final curved = CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeOutCubic,
+        reverseCurve: Curves.easeInCubic,
+      );
+
+      return FadeTransition(
+        opacity: curved,
+        child: SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0.025, 0),
+            end: Offset.zero,
+          ).animate(curved),
+          child: child,
+        ),
+      );
+    },
+  );
 }

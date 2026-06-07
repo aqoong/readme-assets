@@ -7,5 +7,5 @@ void goToRoute(BuildContext context, SiteRoute route) {
   if (current == route.path) {
     return;
   }
-  Navigator.of(context).pushReplacementNamed(route.path);
+  Navigator.of(context).pushNamed(route.path);
 }
