@@ -5,5 +5,5 @@ import 'src/app.dart';
 
 void main() {
   usePathUrlStrategy();
-  runApp(const AQoongApp());
+  runApp(AQoongApp());
 }
