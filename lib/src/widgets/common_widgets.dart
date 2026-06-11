@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:size_tailored_text/size_tailored_text.dart';
 
 class SectionBand extends StatelessWidget {
   const SectionBand({super.key, required this.child, this.backgroundColor});
@@ -81,11 +82,17 @@ class Pill extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-        child: Text(
-          label,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w700,
+        child: SizedBox(
+          height: 17,
+          child: SizeTailoredTextWidget(
+            label,
+            maxLines: 1,
+            minFontSize: 10,
+            overflow: TextOverflow.clip,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
       ),
@@ -108,12 +115,18 @@ class Tag extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-        child: Text(
-          label,
-          style: const TextStyle(
-            color: Color(0xFF1D4ED8),
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
+        child: SizedBox(
+          height: 15,
+          child: SizeTailoredTextWidget(
+            label,
+            maxLines: 1,
+            minFontSize: 9,
+            overflow: TextOverflow.clip,
+            style: const TextStyle(
+              color: Color(0xFF1D4ED8),
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
       ),
