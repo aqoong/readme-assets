@@ -3,6 +3,7 @@
 import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
+import 'package:size_tailored_text/size_tailored_text.dart';
 
 import '../../../package_catalog.dart';
 import '../../widgets/common_widgets.dart';
@@ -104,9 +105,14 @@ class _PackageDetailsSection extends StatelessWidget {
             children: [
               for (final detail in packageDetails)
                 ExpansionTile(
-                  title: Text(
-                    detail.packageName,
-                    style: const TextStyle(fontWeight: FontWeight.w800),
+                  title: SizedBox(
+                    height: 24,
+                    child: SizeTailoredTextWidget(
+                      detail.packageName,
+                      maxLines: 1,
+                      minFontSize: 13,
+                      style: const TextStyle(fontWeight: FontWeight.w800),
+                    ),
                   ),
                   subtitle: const Text(
                     'Installation, usage, features, and parameters',
@@ -250,13 +256,18 @@ class _TableCellText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontFamily: isHeader ? null : 'monospace',
-          fontSize: 12,
-          color: const Color(0xFF334155),
-          fontWeight: isHeader ? FontWeight.w800 : FontWeight.w500,
+      child: SizedBox(
+        height: isHeader ? 18 : 34,
+        child: SizeTailoredTextWidget(
+          text,
+          maxLines: isHeader ? 1 : 2,
+          minFontSize: 8,
+          style: TextStyle(
+            fontFamily: isHeader ? null : 'monospace',
+            fontSize: 12,
+            color: const Color(0xFF334155),
+            fontWeight: isHeader ? FontWeight.w800 : FontWeight.w500,
+          ),
         ),
       ),
     );
@@ -283,18 +294,28 @@ class _PackageCard extends StatelessWidget {
               color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(height: 16),
-            Text(
-              info.name,
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+            SizedBox(
+              height: 30,
+              child: SizeTailoredTextWidget(
+                info.name,
+                maxLines: 1,
+                minFontSize: 14,
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+              ),
             ),
             const SizedBox(height: 8),
-            Text(
-              info.tagline,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.w700,
+            SizedBox(
+              height: 22,
+              child: SizeTailoredTextWidget(
+                info.tagline,
+                maxLines: 1,
+                minFontSize: 11,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
             const SizedBox(height: 12),

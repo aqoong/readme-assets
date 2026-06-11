@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:size_tailored_text/size_tailored_text.dart';
 
 import '../routes/navigation.dart';
 import '../routes/site_route.dart';
@@ -12,17 +13,26 @@ class ContentGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final columns = constraints.maxWidth >= 900 ? 3 : 1;
+        if (constraints.maxWidth < 900) {
+          return Column(
+            children: [
+              for (var index = 0; index < items.length; index++) ...[
+                items[index],
+                if (index != items.length - 1) const SizedBox(height: 16),
+              ],
+            ],
+          );
+        }
 
         return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: items.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: columns,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
-            childAspectRatio: columns == 1 ? 2.7 : 1.15,
+            childAspectRatio: 1.15,
           ),
           itemBuilder: (context, index) => items[index],
         );
@@ -55,18 +65,23 @@ class ContentItem extends StatelessWidget {
           children: [
             Icon(icon, color: Theme.of(context).colorScheme.primary),
             const SizedBox(height: 14),
-            Text(
-              title,
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+            SizedBox(
+              height: 24,
+              child: SizeTailoredTextWidget(
+                title,
+                maxLines: 1,
+                minFontSize: 13,
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+              ),
             ),
             const SizedBox(height: 10),
-            Expanded(
-              child: Text(
-                body,
-                style: const TextStyle(color: Color(0xFF475569), height: 1.45),
-              ),
+            Text(
+              body,
+              maxLines: route == null ? 6 : 5,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(color: Color(0xFF475569), height: 1.45),
             ),
             if (route != null) ...[
               const SizedBox(height: 14),
