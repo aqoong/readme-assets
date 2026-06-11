@@ -6,6 +6,7 @@ import '../views/pages/home_page.dart';
 import '../views/pages/json_parser_page.dart';
 import '../views/pages/packages_page.dart';
 import '../views/pages/privacy_page.dart';
+import '../core/analytics.dart';
 import 'site_route.dart';
 
 class SiteRouteInformationParser extends RouteInformationParser<SiteRoute> {
@@ -27,6 +28,7 @@ class SiteRouteInformationParser extends RouteInformationParser<SiteRoute> {
 class SiteRouterDelegate extends RouterDelegate<SiteRoute>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<SiteRoute> {
   SiteRoute _currentRoute = SiteRoute.home;
+  String? _trackedPath;
 
   @override
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -40,12 +42,14 @@ class SiteRouterDelegate extends RouterDelegate<SiteRoute>
     }
 
     _currentRoute = route;
+    _trackCurrentRoute();
     notifyListeners();
   }
 
   @override
   Future<void> setNewRoutePath(SiteRoute configuration) async {
     _currentRoute = configuration;
+    _trackCurrentRoute();
   }
 
   @override
@@ -77,6 +81,15 @@ class SiteRouterDelegate extends RouterDelegate<SiteRoute>
       SiteRoute.about => const AboutPage(),
       SiteRoute.privacy => const PrivacyPage(),
     };
+  }
+
+  void _trackCurrentRoute() {
+    if (_trackedPath == _currentRoute.path) {
+      return;
+    }
+
+    _trackedPath = _currentRoute.path;
+    Analytics.logPageView(path: _currentRoute.path, title: _currentRoute.label);
   }
 }
 
