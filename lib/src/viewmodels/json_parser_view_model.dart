@@ -9,6 +9,8 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import '../utils/json_tools.dart';
+
 class JsonParserViewModel extends ChangeNotifier {
   JsonParserViewModel() {
     controller.addListener(_scheduleParse);
@@ -23,6 +25,7 @@ class JsonParserViewModel extends ChangeNotifier {
   bool isDownloading = false;
 
   Timer? _debounce;
+  static const maxInputLength = 240000;
 
   @override
   void dispose() {
@@ -53,11 +56,47 @@ class JsonParserViewModel extends ChangeNotifier {
       }
 
       final bytes = byteData.buffer.asUint8List();
-      _saveBytesAsPng(bytes, 'json-block-visualization.png');
+      _saveBytes(bytes, 'json-block-visualization.png', 'image/png');
     } finally {
       isDownloading = false;
       notifyListeners();
     }
+  }
+
+  void prettyPrint() {
+    if (parsed == null || error != null) {
+      _parse();
+      if (parsed == null || error != null) {
+        return;
+      }
+    }
+    controller.text = prettyPrintJson(parsed);
+  }
+
+  void minify() {
+    if (parsed == null || error != null) {
+      _parse();
+      if (parsed == null || error != null) {
+        return;
+      }
+    }
+    controller.text = minifyJson(parsed);
+  }
+
+  void clear() {
+    controller.clear();
+  }
+
+  void loadSample() {
+    controller.text = _sampleJson.trim();
+  }
+
+  void downloadJson() {
+    if (parsed == null || error != null) {
+      return;
+    }
+    final bytes = Uint8List.fromList(utf8.encode(prettyPrintJson(parsed)));
+    _saveBytes(bytes, 'formatted-json.json', 'application/json');
   }
 
   void _scheduleParse() {
@@ -66,22 +105,22 @@ class JsonParserViewModel extends ChangeNotifier {
   }
 
   void _parse() {
-    try {
-      final input = controller.text.trim();
-      parsed = input.isEmpty ? null : jsonDecode(input);
-      error = null;
-    } on FormatException catch (parseError) {
+    final input = controller.text;
+    if (input.length > maxInputLength) {
       parsed = null;
-      error = '${parseError.message} at character ${parseError.offset ?? '-'}';
-    } on Object catch (parseError) {
-      parsed = null;
-      error = parseError.toString();
+      error =
+          'Input is too large for the browser preview. Keep it under $maxInputLength characters.';
+      notifyListeners();
+      return;
     }
+    final result = parseJsonInput(input);
+    parsed = result.value;
+    error = result.error;
     notifyListeners();
   }
 
-  void _saveBytesAsPng(Uint8List bytes, String fileName) {
-    final blob = html.Blob([bytes], 'image/png');
+  void _saveBytes(Uint8List bytes, String fileName, String mimeType) {
+    final blob = html.Blob([bytes], mimeType);
     final url = html.Url.createObjectUrlFromBlob(blob);
     final anchor = html.AnchorElement(href: url)
       ..download = fileName

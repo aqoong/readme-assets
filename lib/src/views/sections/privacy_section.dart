@@ -20,19 +20,24 @@ class PrivacySection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _PolicyItem(
-                  title: 'Information We Collect',
+                  title: 'Site logs and cookies',
                   body:
-                      'This site does not directly collect personal information. Google AdSense may use cookies to show ads based on browsing history.',
+                      'This static site does not ask visitors to create an account or submit personal profile data. Hosting, browser, analytics, or advertising providers may process basic logs, device information, and cookies according to their own policies.',
                 ),
                 _PolicyItem(
                   title: 'Google AdSense',
                   body:
-                      'Google may use cookies and web beacons to serve ads. Personalized advertising can be managed through Google Ads Settings.',
+                      'This site may use Google AdSense. Google and its partners may use advertising cookies to serve or measure ads. Visitors can manage personalized advertising through Google Ads Settings and browser cookie controls.',
                 ),
                 _PolicyItem(
-                  title: 'Analytics',
+                  title: 'JSON Parser data',
                   body:
-                      'This site may use analytics to understand visitor behavior. Data is anonymous and aggregated.',
+                      'JSON pasted into the JSON Parser is processed in the client browser for validation, formatting, minifying, copying, and visualization. The tool is designed not to send the entered JSON to a server, but visitors should still avoid pasting secrets or private customer data into browser tools.',
+                ),
+                _PolicyItem(
+                  title: 'External links',
+                  body:
+                      'Pages link to GitHub, pub.dev, a technical blog, and other developer resources. External websites have their own privacy policies and content practices.',
                 ),
                 _PolicyItem(
                   title: 'Contact',

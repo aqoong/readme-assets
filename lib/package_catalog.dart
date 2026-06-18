@@ -1,28 +1,49 @@
 class PackageInfo {
   const PackageInfo({
+    required this.slug,
     required this.name,
-    required this.category,
-    required this.tagline,
+    required this.platform,
+    required this.summary,
     required this.description,
-    required this.highlights,
-    required this.linkLabel,
-    required this.url,
+    required this.problem,
+    required this.features,
+    required this.installCode,
+    required this.usageCode,
+    required this.githubUrl,
+    required this.tags,
+    required this.lastUpdated,
+    this.pubDevUrl,
+    this.documentationUrl,
+    this.version,
+    this.relatedPackageSlugs = const [],
+    this.relatedArticleSlugs = const [],
+    this.parameters = const [],
   });
 
+  final String slug;
   final String name;
-  final String category;
-  final String tagline;
+  final String platform;
+  final String summary;
   final String description;
-  final List<String> highlights;
-  final String linkLabel;
-  final String url;
-}
+  final String problem;
+  final List<String> features;
+  final String installCode;
+  final String usageCode;
+  final String? pubDevUrl;
+  final String githubUrl;
+  final String? documentationUrl;
+  final List<String> tags;
+  final String lastUpdated;
+  final String? version;
+  final List<String> relatedPackageSlugs;
+  final List<String> relatedArticleSlugs;
+  final List<ParameterInfo> parameters;
 
-class PackageDetail {
-  const PackageDetail({required this.packageName, required this.sections});
-
-  final String packageName;
-  final List<DetailSection> sections;
+  String get category => platform;
+  String get tagline => summary;
+  String get linkLabel => pubDevUrl == null ? 'View on GitHub' : 'View package';
+  String get url => pubDevUrl ?? githubUrl;
+  List<String> get highlights => tags.take(3).toList();
 }
 
 class DetailSection {
@@ -41,6 +62,13 @@ class DetailSection {
   final List<ParameterInfo> parameters;
 }
 
+class PackageDetail {
+  const PackageDetail({required this.packageName, required this.sections});
+
+  final String packageName;
+  final List<DetailSection> sections;
+}
+
 class ParameterInfo {
   const ParameterInfo({
     required this.name,
@@ -57,114 +85,267 @@ class ParameterInfo {
 
 const packages = <PackageInfo>[
   PackageInfo(
+    slug: 'flutter-soft-keyboard',
     name: 'flutter_soft_keyboard',
-    category: 'Flutter',
-    tagline: 'Custom virtual keyboard widget',
+    platform: 'Flutter',
+    summary: 'Custom virtual keyboard widget',
     description:
-        'A fully customizable virtual keyboard widget built using a 2D array layout. Ideal for PIN pads, custom alphanumeric inputs, and apps requiring a non-system keyboard.',
-    highlights: ['Virtual keyboard', 'PIN pad', 'Custom input'],
-    linkLabel: 'View package',
-    url: 'https://pub.dev/packages/flutter_soft_keyboard',
+        'A customizable virtual keyboard widget built from a two-dimensional key layout. It is useful for PIN pads, POS input, numeric forms, and screens where the system keyboard is not the best interaction model.',
+    problem:
+        'System keyboards are hard to constrain for kiosk, PIN, payment, and in-app keypad flows. This package keeps layout, key labels, and input events inside the Flutter widget tree.',
+    features: [
+      'Define keyboard rows with List<List<VirtualKey>>',
+      'Listen to the last key and accumulated text through a controller',
+      'Control keyboard width, height, row spacing, and column spacing',
+      'Use custom keys for numeric, PIN, command, or alphanumeric layouts',
+      'Dispose the controller explicitly with the surrounding form state',
+    ],
+    installCode: '''
+dependencies:
+  flutter_soft_keyboard: ^latest''',
+    usageCode: '''
+final keyboardController = KeyboardInputController();
+
+keyboardController.setKeyListener((lastKey, enteredText) {
+  debugPrint('Last key: \$lastKey');
+  debugPrint('Full text: \$enteredText');
+});
+
+final keyLayout = [
+  [VirtualKey(text: '1'), VirtualKey(text: '2'), VirtualKey(text: '3')],
+  [VirtualKey(text: '4'), VirtualKey(text: '5'), VirtualKey(text: '6')],
+  [VirtualKey(text: '7'), VirtualKey(text: '8'), VirtualKey(text: '9')],
+];
+
+SoftKeyboardWidget(
+  width: 360,
+  height: 280,
+  columnSpacing: 4,
+  rowSpacing: 4,
+  keyLayout: keyLayout,
+  keyboardInputController: keyboardController,
+)''',
+    pubDevUrl: 'https://pub.dev/packages/flutter_soft_keyboard',
+    githubUrl: 'https://github.com/aqoong/flutter_soft_keyboard',
+    tags: ['Virtual keyboard', 'PIN pad', 'Custom input'],
+    lastUpdated: '2026-06-17',
+    relatedPackageSlugs: ['ripple-container'],
+    relatedArticleSlugs: ['flutter-custom-keyboard'],
+    parameters: [
+      ParameterInfo(
+        name: 'keyLayout',
+        type: 'List<List<VirtualKey>>',
+        description:
+            'Two-dimensional key structure rendered by row and column.',
+        required: true,
+      ),
+      ParameterInfo(
+        name: 'keyboardInputController',
+        type: 'KeyboardInputController',
+        description: 'Controller used to observe input and dispose resources.',
+        required: true,
+      ),
+      ParameterInfo(
+        name: 'width / height',
+        type: 'double',
+        description: 'Explicit keyboard dimensions for predictable keypad UI.',
+      ),
+    ],
   ),
   PackageInfo(
-    name: 'size_tailored_text',
-    category: 'Flutter',
-    tagline: 'Responsive text sizing for Flutter widgets',
-    description:
-        'Automatically scales text to fit the size of its parent widget. Removes responsive typography guesswork for dashboards, cards, and variable-length text.',
-    highlights: ['Flutter UI', 'Responsive text', 'Layout utility'],
-    linkLabel: 'View package',
-    url: 'https://pub.dev/packages/size_tailored_text',
-  ),
-  PackageInfo(
+    slug: 'ripple-container',
     name: 'ripple_container',
-    category: 'Flutter',
-    tagline: 'Material ripple behavior for custom containers',
+    platform: 'Flutter',
+    summary: 'Material ripple behavior for custom containers',
     description:
-        'A versatile Box widget that wraps any child with a customizable ripple effect. Useful as a styleable touchable container alternative to bare GestureDetector.',
-    highlights: ['Interaction', 'Material feedback', 'Custom UI'],
-    linkLabel: 'View package',
-    url: 'https://pub.dev/packages/ripple_container',
+        'A styleable container that exposes Material ink feedback while keeping common BoxDecoration-like controls close to the tap target.',
+    problem:
+        'GestureDetector handles taps but gives no visual feedback. InkWell gives feedback but needs the right Material ancestry and clipping. ripple_container packages that pattern for reusable custom cards and buttons.',
+    features: [
+      'Material ripple and splash feedback for custom surfaces',
+      'Configurable background color, border, border radius, margin, and shadow',
+      'onTap and onLongPress callbacks',
+      'Custom splash color for branded interactions',
+    ],
+    installCode: '''
+dependencies:
+  ripple_container: ^latest''',
+    usageCode: '''
+RippleContainer(
+  width: 200,
+  height: 100,
+  backgroundColor: Colors.blueAccent,
+  borderRadius: BorderRadius.circular(16),
+  splashColor: Colors.amber,
+  onTap: () => debugPrint('tapped'),
+  child: const Center(child: Text('Tap me')),
+)''',
+    pubDevUrl: 'https://pub.dev/packages/ripple_container',
+    githubUrl: 'https://github.com/aqoong/ripple_container',
+    tags: ['Interaction', 'Material feedback', 'Custom UI'],
+    lastUpdated: '2026-06-17',
+    relatedPackageSlugs: ['flutter-soft-keyboard'],
+    relatedArticleSlugs: ['flutter-ripple-effect'],
   ),
   PackageInfo(
+    slug: 'size-tailored-text',
+    name: 'size_tailored_text',
+    platform: 'Flutter',
+    summary: 'Responsive text sizing for Flutter widgets',
+    description:
+        'Automatically scales text to fit the size of its parent widget so variable labels, cards, dashboards, and badges stay readable.',
+    problem:
+        'Long text inside fixed UI often overflows or gets clipped. A controlled auto-size strategy helps preserve layout while keeping a minimum readable font size.',
+    features: [
+      'Auto-scales font size to fit parent constraints',
+      'Accepts standard TextStyle',
+      'Works for dashboards, cards, labels, and responsive components',
+      'Keeps layout code smaller than repeated LayoutBuilder calculations',
+    ],
+    installCode: '''
+dependencies:
+  size_tailored_text: ^latest''',
+    usageCode: '''
+SizedBox(
+  width: 200,
+  height: 60,
+  child: SizeTailoredTextWidget(
+    'A long product or dashboard label',
+    maxLines: 1,
+    minFontSize: 11,
+    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+  ),
+)''',
+    pubDevUrl: 'https://pub.dev/packages/size_tailored_text',
+    githubUrl: 'https://github.com/aqoong/size_tailored_text',
+    tags: ['Flutter UI', 'Responsive text', 'Layout utility'],
+    lastUpdated: '2026-06-17',
+    relatedArticleSlugs: ['flutter-auto-resize-text'],
+  ),
+  PackageInfo(
+    slug: 'project-color-palette',
     name: 'project_color_palette',
-    category: 'Flutter',
-    tagline: 'CSV-based color tokens for Flutter',
+    platform: 'Flutter',
+    summary: 'CSV-based color tokens for Flutter',
     description:
-        'A bridge between designers and Flutter developers. Converts project color definitions from CSV into typed Flutter Color objects to keep design tokens in sync.',
-    highlights: ['Design tokens', 'CSV palette', 'Theme workflow'],
-    linkLabel: 'View package',
-    url: 'https://pub.dev/packages/project_color_palette',
+        'A bridge between designers and Flutter developers. It converts project color definitions from CSV into typed Flutter color values.',
+    problem:
+        'Teams often copy hex values manually from design files. A simple palette file lowers the chance of drift between design tokens and app code.',
+    features: [
+      'Read project color definitions from CSV',
+      'Keep a shared color vocabulary in source control',
+      'Use generated or loaded colors in Flutter themes and widgets',
+    ],
+    installCode: '''
+dependencies:
+  project_color_palette: ^latest''',
+    usageCode: '''
+# colors.csv
+primary,#1A73E8
+secondary,#F5F5F5
+
+final palette = await ProjectColorPalette.fromCsv('assets/colors.csv');
+Container(color: palette['primary']);''',
+    pubDevUrl: 'https://pub.dev/packages/project_color_palette',
+    githubUrl: 'https://github.com/aqoong/project_color_palette',
+    tags: ['Design tokens', 'CSV palette', 'Theme workflow'],
+    lastUpdated: '2026-06-17',
   ),
   PackageInfo(
+    slug: 'aqlinter',
     name: 'aqlinter',
-    category: 'Flutter',
-    tagline: 'Lint rules for cleaner Flutter and Dart code',
+    platform: 'Flutter',
+    summary: 'Lint rules for cleaner Flutter and Dart code',
     description:
-        'A curated set of lint rules for Flutter projects. Drop it into analysis_options.yaml for a consistent, opinionated code quality baseline.',
-    highlights: ['Dart lint', 'Code quality', 'Team conventions'],
-    linkLabel: 'View package',
-    url: 'https://pub.dev/packages/aqlinter',
+        'A curated lint baseline for Flutter projects that want consistent static analysis and team conventions.',
+    problem:
+        'Every project should not rediscover analysis_options.yaml from scratch. A shared lint package makes consistency repeatable.',
+    features: [
+      'One-line include from analysis_options.yaml',
+      'Opinionated but overridable Dart and Flutter rules',
+      'Useful for personal packages and team projects',
+    ],
+    installCode: '''
+dev_dependencies:
+  aqlinter: ^latest''',
+    usageCode: '''
+include: package:aqlinter/analysis_options.yaml
+
+linter:
+  rules:
+    prefer_single_quotes: true''',
+    pubDevUrl: 'https://pub.dev/packages/aqlinter',
+    githubUrl: 'https://github.com/aqoong/aqlinter',
+    tags: ['Dart lint', 'Code quality', 'Team conventions'],
+    lastUpdated: '2026-06-17',
   ),
   PackageInfo(
-    name: 'SlidePhotoViewer',
-    category: 'Android',
-    tagline: 'Gesture photo viewer for Android',
-    description:
-        'A custom view for displaying and sliding through a set of photos with smooth gesture support.',
-    highlights: ['Native Android', 'Photo viewer', 'Gestures'],
-    linkLabel: 'View on GitHub',
-    url: 'https://github.com/aqoong/SlidePhotoViewer',
-  ),
-  PackageInfo(
+    slug: 'expandable-text-view',
     name: 'ExpandableTextView',
-    category: 'Android',
-    tagline: 'Expandable long text component',
+    platform: 'Android',
+    summary: 'Expandable long text component',
     description:
-        'A text view that can expand and collapse long content, great for article previews and descriptions.',
-    highlights: ['Native Android', 'Text view', 'Collapse UI'],
-    linkLabel: 'View on GitHub',
-    url: 'https://github.com/aqoong/ExpandableTextView',
+        'A native Android TextView pattern for showing long content in a collapsed state with a clear expand and collapse interaction.',
+    problem:
+        'Feeds, product descriptions, and comments need compact previews without losing access to the full text.',
+    features: [
+      'Collapsed and expanded text states',
+      'Useful in list rows and detail screens',
+      'Clear more/less interaction for long content',
+    ],
+    installCode: '''
+// See the GitHub repository for the Android integration instructions.''',
+    usageCode: '''
+// XML and Kotlin usage depend on the repository version.
+// Confirm the latest API in GitHub before copying into production.''',
+    githubUrl: 'https://github.com/aqoong/ExpandableTextView',
+    tags: ['Native Android', 'TextView', 'Collapse UI'],
+    lastUpdated: '2026-06-17',
+    relatedArticleSlugs: ['android-expandable-text-view'],
   ),
   PackageInfo(
+    slug: 'hashtag-edit-text-view',
     name: 'HashTagEditTextView',
-    category: 'Android',
-    tagline: 'Hashtag-aware edit text',
+    platform: 'Android',
+    summary: 'Hashtag-aware edit text',
     description:
-        'An edit text that auto-highlights hashtag tokens as the user types, with callback support.',
-    highlights: ['Native Android', 'EditText', 'Hashtags'],
-    linkLabel: 'View on GitHub',
-    url: 'https://github.com/aqoong/HashTagEditTextView',
+        'An Android EditText-oriented library for hashtag entry flows where typed tokens need visual treatment and callback support.',
+    problem:
+        'Social and content apps often need hashtag-aware text input without rebuilding token parsing on every screen.',
+    features: [
+      'Hashtag token highlighting',
+      'EditText-based input behavior',
+      'Useful for social posting and content metadata forms',
+    ],
+    installCode: '''
+// See the GitHub repository for the Android integration instructions.''',
+    usageCode: '''
+// Confirm constructor and XML attributes in GitHub before production use.''',
+    githubUrl: 'https://github.com/aqoong/HashTagEditTextView',
+    tags: ['Native Android', 'EditText', 'Hashtags'],
+    lastUpdated: '2026-06-17',
   ),
   PackageInfo(
+    slug: 'dynamic-indicator',
     name: 'DynamicIndicator',
-    category: 'Android',
-    tagline: 'Flexible page and step indicator',
+    platform: 'Android',
+    summary: 'Flexible page and step indicator',
     description:
-        'A flexible page or step indicator that dynamically adjusts to the number of items and current position.',
-    highlights: ['Native Android', 'Indicator', 'Paging UI'],
-    linkLabel: 'View on GitHub',
-    url: 'https://github.com/aqoong/DynamicIndicator',
-  ),
-  PackageInfo(
-    name: 'ObjectFlowView',
-    category: 'Android',
-    tagline: 'Flow layout for object collections',
-    description:
-        'A view that displays a collection of objects in a flowing, word-wrap style layout.',
-    highlights: ['Native Android', 'Flow layout', 'Collection UI'],
-    linkLabel: 'View on GitHub',
-    url: 'https://github.com/aqoong/ObjectFlowView',
-  ),
-  PackageInfo(
-    name: 'TextCheckBoxView',
-    category: 'Android',
-    tagline: 'Checkbox and styled text compound view',
-    description:
-        'A compound view combining a checkbox with a styled text label for forms and settings screens.',
-    highlights: ['Native Android', 'Compound view', 'Forms'],
-    linkLabel: 'View on GitHub',
-    url: 'https://github.com/aqoong/TextCheckBoxView',
+        'A native Android indicator component for paging or step-based interfaces where the number of items can change.',
+    problem:
+        'Carousels and onboarding flows need indicators that communicate position without hand-coded drawing logic on each screen.',
+    features: [
+      'Dynamic item counts',
+      'Current position display',
+      'Useful for onboarding, pagers, and galleries',
+    ],
+    installCode: '''
+// See the GitHub repository for the Android integration instructions.''',
+    usageCode: '''
+// Confirm the current API in GitHub before copying into production.''',
+    githubUrl: 'https://github.com/aqoong/DynamicIndicator',
+    tags: ['Native Android', 'Indicator', 'Paging UI'],
+    lastUpdated: '2026-06-17',
   ),
 ];
 
@@ -172,329 +353,47 @@ List<PackageInfo> packagesByCategory(String category) {
   return packages.where((info) => info.category == category).toList();
 }
 
-const packageDetails = <PackageDetail>[
-  PackageDetail(
-    packageName: 'flutter_soft_keyboard',
-    sections: [
-      DetailSection(
-        title: 'Platform support',
-        items: ['Android', 'iOS', 'Linux', 'macOS', 'Web', 'Windows'],
-      ),
-      DetailSection(
-        title: 'Installation',
-        code: '''
-dependencies:
-  flutter_soft_keyboard: ^latest''',
-      ),
-      DetailSection(
-        title: 'Basic usage',
-        code: '''
-// 1. Create a controller
-final keyboardController = KeyboardInputController();
+PackageInfo? packageBySlug(String slug) {
+  for (final package in packages) {
+    if (package.slug == slug) {
+      return package;
+    }
+  }
+  return null;
+}
 
-// 2. Listen to key events
-keyboardController.setKeyListener((lastKey, enteredText) {
-  print('Last key: \$lastKey');
-  print('Full text: \$enteredText');
-});
+PackageInfo? packageByName(String name) {
+  for (final package in packages) {
+    if (package.name == name) {
+      return package;
+    }
+  }
+  return null;
+}
 
-// 3. Define a 2D key layout
-final keyLayout = [
-  [VirtualKey(text: '1'), VirtualKey(text: '2'), VirtualKey(text: '3')],
-  [VirtualKey(text: '4'), VirtualKey(text: '5'), VirtualKey(text: '6')],
-  [VirtualKey(text: '7'), VirtualKey(text: '8'), VirtualKey(text: '9')],
-];
+List<PackageInfo> relatedPackagesFor(PackageInfo package) {
+  return package.relatedPackageSlugs
+      .map(packageBySlug)
+      .whereType<PackageInfo>()
+      .toList();
+}
 
-// 4. Use the widget
-SoftKeyboardWidget(
-  width: 400,
-  height: 300,
-  columnSpacing: 4,
-  rowSpacing: 4,
-  keyLayout: keyLayout,
-  keyboardInputController: keyboardController,
-)''',
-      ),
-      DetailSection(
-        title: 'Key features',
-        items: [
-          'Define any keyboard layout using a simple 2D array',
-          'Real-time key listener with last key and full entered text',
-          'Customizable column and row spacing',
-          'Explicit width and height control for precise sizing',
-          'Integrates with ripple_container for tap feedback',
+List<PackageDetail> get packageDetails {
+  return [
+    for (final package in packages.where((item) => item.platform == 'Flutter'))
+      PackageDetail(
+        packageName: package.name,
+        sections: [
+          DetailSection(title: 'Solves', body: package.problem),
+          DetailSection(title: 'Installation', code: package.installCode),
+          DetailSection(title: 'Basic usage', code: package.usageCode),
+          DetailSection(title: 'Key features', items: package.features),
+          if (package.parameters.isNotEmpty)
+            DetailSection(
+              title: 'Constructor parameters',
+              parameters: package.parameters,
+            ),
         ],
       ),
-      DetailSection(
-        title: 'Constructor parameters',
-        parameters: [
-          ParameterInfo(
-            name: 'keyLayout',
-            type: 'List<List<VirtualKey>>',
-            description: '2D array defining the keyboard structure',
-            required: true,
-          ),
-          ParameterInfo(
-            name: 'keyboardInputController',
-            type: 'KeyboardInputController',
-            description: 'Controller for listening to input events',
-            required: true,
-          ),
-          ParameterInfo(
-            name: 'width',
-            type: 'double',
-            description: 'Total width of the keyboard widget',
-          ),
-          ParameterInfo(
-            name: 'height',
-            type: 'double',
-            description: 'Total height of the keyboard widget',
-          ),
-          ParameterInfo(
-            name: 'columnSpacing',
-            type: 'double',
-            description: 'Horizontal spacing between keys, default 4',
-          ),
-          ParameterInfo(
-            name: 'rowSpacing',
-            type: 'double',
-            description: 'Vertical spacing between rows, default 4',
-          ),
-        ],
-      ),
-      DetailSection(
-        title: 'Lifecycle',
-        code: '''
-@override
-void dispose() {
-  keyboardController.dispose(); // Always dispose!
-  super.dispose();
-}''',
-      ),
-    ],
-  ),
-  PackageDetail(
-    packageName: 'ripple_container',
-    sections: [
-      DetailSection(
-        title: 'Installation',
-        code: '''
-dependencies:
-  ripple_container: ^latest''',
-      ),
-      DetailSection(
-        title: 'Basic usage',
-        code: '''
-RippleContainer(
-  width: 200,
-  height: 100,
-  backgroundColor: Colors.blueAccent,
-  margin: const EdgeInsets.all(10),
-  borderRadius: BorderRadius.circular(30),
-  splashColor: Colors.amber,
-  border: const Border.fromBorderSide(
-    BorderSide(color: Colors.grey),
-  ),
-  boxShadow: [
-    BoxShadow(
-      color: Colors.black.withOpacity(0.5),
-      offset: const Offset(0, 2),
-      blurRadius: 10,
-    ),
-  ],
-  onTap: () => print('tapped'),
-  onLongPress: () => print('long pressed'),
-  child: const Text('Tap me'),
-)''',
-      ),
-      DetailSection(
-        title: 'Key features',
-        items: [
-          'Native Material ripple and splash effect on any container',
-          'Full control over background color, border, and border radius',
-          'Box shadow support for elevation effects',
-          'onTap and onLongPress callbacks',
-          'Custom splash color for branded interactions',
-        ],
-      ),
-      DetailSection(
-        title: 'Constructor parameters',
-        parameters: [
-          ParameterInfo(
-            name: 'child',
-            type: 'Widget',
-            description: 'The widget placed inside the container',
-            required: true,
-          ),
-          ParameterInfo(
-            name: 'width',
-            type: 'double?',
-            description: 'Container width; defaults to parent constraints',
-          ),
-          ParameterInfo(
-            name: 'height',
-            type: 'double?',
-            description: 'Container height; defaults to child height',
-          ),
-          ParameterInfo(
-            name: 'backgroundColor',
-            type: 'Color?',
-            description: 'Background fill color of the container',
-          ),
-          ParameterInfo(
-            name: 'borderRadius',
-            type: 'BorderRadius?',
-            description: 'Rounded corners applied to container and ripple',
-          ),
-          ParameterInfo(
-            name: 'splashColor',
-            type: 'Color?',
-            description: 'Color of the ripple splash effect',
-          ),
-          ParameterInfo(
-            name: 'border',
-            type: 'Border?',
-            description: 'Border drawn around the container',
-          ),
-          ParameterInfo(
-            name: 'boxShadow',
-            type: 'List<BoxShadow>?',
-            description: 'Shadow layers for elevation',
-          ),
-          ParameterInfo(
-            name: 'margin',
-            type: 'EdgeInsets?',
-            description: 'Outer margin around the container',
-          ),
-          ParameterInfo(
-            name: 'onTap',
-            type: 'VoidCallback?',
-            description: 'Called when the container is tapped',
-          ),
-          ParameterInfo(
-            name: 'onLongPress',
-            type: 'VoidCallback?',
-            description: 'Called on long press',
-          ),
-        ],
-      ),
-    ],
-  ),
-  PackageDetail(
-    packageName: 'size_tailored_text',
-    sections: [
-      DetailSection(
-        title: 'Installation',
-        code: '''
-dependencies:
-  size_tailored_text: ^latest''',
-      ),
-      DetailSection(
-        title: 'Basic usage',
-        code: '''
-SizedBox(
-  width: 200,
-  height: 60,
-  child: SizeTailoredText(
-    text: 'Hello World',
-    style: const TextStyle(
-      fontSize: 100,
-      fontWeight: FontWeight.bold,
-    ),
-  ),
-)''',
-      ),
-      DetailSection(
-        title: 'Use case: responsive card title',
-        code: '''
-LayoutBuilder(
-  builder: (context, constraints) {
-    return SizeTailoredText(
-      text: userName,
-      style: const TextStyle(fontSize: 24),
-    );
-  },
-)''',
-      ),
-      DetailSection(
-        title: 'Key features',
-        items: [
-          'Auto-scales font size to fit parent dimensions',
-          'Accepts standard TextStyle for full styling control',
-          'Ideal for dashboards, cards, and variable-length text',
-          'Cross-platform: Android, iOS, Web, Desktop',
-        ],
-      ),
-    ],
-  ),
-  PackageDetail(
-    packageName: 'project_color_palette',
-    sections: [
-      DetailSection(
-        title: 'Installation',
-        code: '''
-dependencies:
-  project_color_palette: ^latest''',
-      ),
-      DetailSection(
-        title: 'CSV format',
-        code: '''
-# colors.csv
-primary,#1A73E8
-secondary,#F5F5F5
-accent,#FF6D00
-error,#B00020
-surface,#FFFFFF''',
-      ),
-      DetailSection(
-        title: 'Usage',
-        code: '''
-final palette = await ProjectColorPalette.fromCsv('assets/colors.csv');
-
-Container(
-  color: palette['primary'],
-  child: Text('Brand color'),
-)''',
-      ),
-      DetailSection(
-        title: 'Key features',
-        items: [
-          'Designer-developer collaboration via simple CSV files',
-          'Single source of truth for project color tokens',
-          'Eliminates manual hex value copy-paste errors',
-          'Integrates with existing Flutter theming system',
-        ],
-      ),
-    ],
-  ),
-  PackageDetail(
-    packageName: 'aqlinter',
-    sections: [
-      DetailSection(
-        title: 'Installation',
-        code: '''
-dev_dependencies:
-  aqlinter: ^latest''',
-      ),
-      DetailSection(
-        title: 'Setup',
-        code: '''
-# analysis_options.yaml
-include: package:aqlinter/analysis_options.yaml
-
-linter:
-  rules:
-    prefer_single_quotes: true''',
-      ),
-      DetailSection(
-        title: 'Key features',
-        items: [
-          'Opinionated, battle-tested rules for Flutter and Dart codebases',
-          'One-line include with zero configuration required',
-          'Fully overridable on a per-rule basis',
-          'Keeps the entire team on the same code style',
-        ],
-      ),
-    ],
-  ),
-];
+  ];
+}

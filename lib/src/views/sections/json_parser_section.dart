@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../viewmodels/json_parser_view_model.dart';
 import '../../widgets/common_widgets.dart';
@@ -37,36 +38,49 @@ class _JsonParserSectionState extends State<JsonParserSection> {
             title: 'JSON Online Parser',
             subtitle:
                 'Paste API responses, Firebase documents, config files, or docs examples and inspect them as typed nested blocks.',
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final isWide = constraints.maxWidth >= 900;
-                final editor = _JsonInputCard(
-                  controller: _viewModel.controller,
-                  error: _viewModel.error,
-                );
-                final preview = _JsonPreviewCard(
-                  captureKey: _viewModel.captureKey,
-                  parsed: _viewModel.parsed,
-                  error: _viewModel.error,
-                  isDownloading: _viewModel.isDownloading,
-                  onDownload: _viewModel.downloadPng,
-                );
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final isWide = constraints.maxWidth >= 900;
+                    final editor = _JsonInputCard(
+                      controller: _viewModel.controller,
+                      error: _viewModel.error,
+                      parsed: _viewModel.parsed,
+                      onPrettyPrint: _viewModel.prettyPrint,
+                      onMinify: _viewModel.minify,
+                      onClear: _viewModel.clear,
+                      onLoadSample: _viewModel.loadSample,
+                      onDownloadJson: _viewModel.downloadJson,
+                    );
+                    final preview = _JsonPreviewCard(
+                      captureKey: _viewModel.captureKey,
+                      parsed: _viewModel.parsed,
+                      error: _viewModel.error,
+                      isDownloading: _viewModel.isDownloading,
+                      onDownload: _viewModel.downloadPng,
+                    );
 
-                if (isWide) {
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(child: editor),
-                      const SizedBox(width: 18),
-                      Expanded(child: preview),
-                    ],
-                  );
-                }
+                    if (isWide) {
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(child: editor),
+                          const SizedBox(width: 18),
+                          Expanded(child: preview),
+                        ],
+                      );
+                    }
 
-                return Column(
-                  children: [editor, const SizedBox(height: 18), preview],
-                );
-              },
+                    return Column(
+                      children: [editor, const SizedBox(height: 18), preview],
+                    );
+                  },
+                ),
+                const SizedBox(height: 26),
+                const _JsonParserGuide(),
+              ],
             ),
           ),
         );
@@ -76,10 +90,25 @@ class _JsonParserSectionState extends State<JsonParserSection> {
 }
 
 class _JsonInputCard extends StatelessWidget {
-  const _JsonInputCard({required this.controller, required this.error});
+  const _JsonInputCard({
+    required this.controller,
+    required this.error,
+    required this.parsed,
+    required this.onPrettyPrint,
+    required this.onMinify,
+    required this.onClear,
+    required this.onLoadSample,
+    required this.onDownloadJson,
+  });
 
   final TextEditingController controller;
   final String? error;
+  final Object? parsed;
+  final VoidCallback onPrettyPrint;
+  final VoidCallback onMinify;
+  final VoidCallback onClear;
+  final VoidCallback onLoadSample;
+  final VoidCallback onDownloadJson;
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +150,45 @@ class _JsonInputCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                FilledButton.icon(
+                  onPressed: onPrettyPrint,
+                  icon: const Icon(Icons.format_align_left),
+                  label: const Text('Pretty print'),
+                ),
+                OutlinedButton.icon(
+                  onPressed: onMinify,
+                  icon: const Icon(Icons.compress),
+                  label: const Text('Minify'),
+                ),
+                OutlinedButton.icon(
+                  onPressed: onLoadSample,
+                  icon: const Icon(Icons.science_outlined),
+                  label: const Text('Sample'),
+                ),
+                OutlinedButton.icon(
+                  onPressed: () => _copy(context, controller.text),
+                  icon: const Icon(Icons.copy_all),
+                  label: const Text('Copy'),
+                ),
+                OutlinedButton.icon(
+                  onPressed: parsed == null || error != null
+                      ? null
+                      : onDownloadJson,
+                  icon: const Icon(Icons.download_outlined),
+                  label: const Text('Download'),
+                ),
+                TextButton.icon(
+                  onPressed: onClear,
+                  icon: const Icon(Icons.clear),
+                  label: const Text('Clear'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 160),
               child: error == null
@@ -141,6 +209,15 @@ class _JsonInputCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _copy(BuildContext context, String value) async {
+    await Clipboard.setData(ClipboardData(text: value));
+    if (context.mounted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('JSON copied')));
+    }
   }
 }
 
@@ -218,7 +295,7 @@ class _JsonPreviewCard extends StatelessWidget {
   }
 }
 
-class _JsonValueBlock extends StatelessWidget {
+class _JsonValueBlock extends StatefulWidget {
   const _JsonValueBlock({
     required this.label,
     required this.value,
@@ -230,14 +307,21 @@ class _JsonValueBlock extends StatelessWidget {
   final int depth;
 
   @override
+  State<_JsonValueBlock> createState() => _JsonValueBlockState();
+}
+
+class _JsonValueBlockState extends State<_JsonValueBlock> {
+  bool _expanded = true;
+
+  @override
   Widget build(BuildContext context) {
-    final currentValue = value;
-    final type = _jsonTypeOf(value);
+    final currentValue = widget.value;
+    final type = _jsonTypeOf(widget.value);
     final color = _typeColor(type);
     final isComplex = currentValue is Map || currentValue is List;
 
     return Container(
-      margin: EdgeInsets.only(left: depth == 0 ? 0 : 14, top: 10),
+      margin: EdgeInsets.only(left: widget.depth == 0 ? 0 : 14, top: 10),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.08),
@@ -253,7 +337,7 @@ class _JsonValueBlock extends StatelessWidget {
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               Text(
-                label,
+                widget.label,
                 style: const TextStyle(
                   fontWeight: FontWeight.w800,
                   fontFamily: 'monospace',
@@ -269,22 +353,41 @@ class _JsonValueBlock extends StatelessWidget {
                     fontSize: 12,
                   ),
                 ),
+              if (isComplex)
+                IconButton(
+                  tooltip: _expanded ? 'Collapse node' : 'Expand node',
+                  onPressed: () => setState(() => _expanded = !_expanded),
+                  icon: Icon(
+                    _expanded
+                        ? Icons.expand_less_rounded
+                        : Icons.expand_more_rounded,
+                    size: 20,
+                  ),
+                ),
             ],
           ),
           const SizedBox(height: 8),
-          if (currentValue is Map<String, dynamic>)
+          if (!_expanded && isComplex)
+            Text(
+              _compactComplexLabel(currentValue),
+              style: const TextStyle(
+                fontFamily: 'monospace',
+                color: Color(0xFF64748B),
+              ),
+            )
+          else if (currentValue is Map<String, dynamic>)
             for (final entry in currentValue.entries)
               _JsonValueBlock(
                 label: entry.key,
                 value: entry.value,
-                depth: depth + 1,
+                depth: widget.depth + 1,
               )
           else if (currentValue is List)
             for (var index = 0; index < currentValue.length; index++)
               _JsonValueBlock(
                 label: '[$index]',
                 value: currentValue[index],
-                depth: depth + 1,
+                depth: widget.depth + 1,
               )
           else
             Text(
@@ -296,6 +399,40 @@ class _JsonValueBlock extends StatelessWidget {
               ),
             ),
         ],
+      ),
+    );
+  }
+}
+
+class _JsonParserGuide extends StatelessWidget {
+  const _JsonParserGuide();
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(22),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'JSON Parser guide',
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900),
+            ),
+            const SizedBox(height: 12),
+            const Text(
+              'Paste JSON into the editor to validate it locally in your browser. Pretty print expands the structure with indentation for reading, while minify removes whitespace for compact transport or config storage. The typed block view distinguishes object, array, string, number, boolean, and null values, and nested nodes can be collapsed when the payload is deep.',
+              style: TextStyle(color: Color(0xFF475569), height: 1.6),
+            ),
+            const SizedBox(height: 14),
+            const Text(
+              'Common syntax errors include missing commas between object fields, trailing commas after the final item, unquoted object keys, and strings that use single quotes. This tool does not send your JSON to a server; still avoid pasting secrets, production tokens, or private customer data into any browser tool.',
+              style: TextStyle(color: Color(0xFF475569), height: 1.6),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -385,6 +522,16 @@ String _sizeLabel(Object? value) {
   }
   if (value is List) {
     return '${value.length} items';
+  }
+  return '';
+}
+
+String _compactComplexLabel(Object? value) {
+  if (value is Map) {
+    return '{ ... ${value.length} keys }';
+  }
+  if (value is List) {
+    return '[ ... ${value.length} items ]';
   }
   return '';
 }

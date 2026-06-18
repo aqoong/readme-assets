@@ -1,9 +1,6 @@
-// ignore_for_file: avoid_web_libraries_in_flutter, deprecated_member_use
-
-import 'dart:html' as html;
-
 import 'package:flutter/material.dart';
 
+import '../../utils/open_url.dart';
 import '../../widgets/common_widgets.dart';
 
 class AboutSection extends StatelessWidget {
@@ -28,30 +25,35 @@ class AboutSection extends StatelessWidget {
                   'I build open-source packages to solve real problems encountered in production apps. The current catalog includes Flutter packages published on pub.dev and native Android custom views shared on GitHub.',
                   style: TextStyle(color: Color(0xFF475569), height: 1.6),
                 ),
+                const SizedBox(height: 14),
+                const Text(
+                  'The site exists to document those libraries, publish practical Flutter and Android notes, provide small developer tools such as the JSON Parser, and keep the projects discoverable from search engines and GitHub Pages.',
+                  style: TextStyle(color: Color(0xFF475569), height: 1.6),
+                ),
+                const SizedBox(height: 14),
+                const Text(
+                  'Only public project information from this repository, GitHub, pub.dev links, and the AQoong contact address is presented here. Personal biography details are intentionally kept limited.',
+                  style: TextStyle(color: Color(0xFF475569), height: 1.6),
+                ),
                 const SizedBox(height: 18),
                 Wrap(
                   spacing: 12,
                   runSpacing: 12,
                   children: [
                     OutlinedButton.icon(
-                      onPressed: () => html.window.open(
-                        'https://github.com/aqoong',
-                        '_blank',
-                      ),
+                      onPressed: () =>
+                          openExternalUrl('https://github.com/aqoong'),
                       icon: const Icon(Icons.code),
                       label: const Text('GitHub'),
                     ),
                     OutlinedButton.icon(
-                      onPressed: () => html.window.open(
-                        'https://owly-expbook.tistory.com',
-                        '_blank',
-                      ),
+                      onPressed: () =>
+                          openExternalUrl('https://owly-expbook.tistory.com'),
                       icon: const Icon(Icons.article_outlined),
                       label: const Text('Tech Blog'),
                     ),
                     OutlinedButton.icon(
-                      onPressed: () => html.window.location.href =
-                          'mailto:cooldnjsdn@gmail.com',
+                      onPressed: () => openMailTo('cooldnjsdn@gmail.com'),
                       icon: const Icon(Icons.mail_outline),
                       label: const Text('Email'),
                     ),
