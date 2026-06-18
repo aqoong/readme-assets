@@ -1,11 +1,10 @@
-// ignore_for_file: avoid_web_libraries_in_flutter, deprecated_member_use
-
-import 'dart:html' as html;
-
 import 'package:flutter/material.dart';
 import 'package:size_tailored_text/size_tailored_text.dart';
 
 import '../../../package_catalog.dart';
+import '../../routes/navigation.dart';
+import '../../routes/site_route.dart';
+import '../../utils/open_url.dart';
 import '../../widgets/common_widgets.dart';
 
 class PackagesSection extends StatelessWidget {
@@ -334,7 +333,13 @@ class _PackageCard extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             TextButton.icon(
-              onPressed: () => html.window.open(info.url, '_blank'),
+              onPressed: () =>
+                  goToRoute(context, SiteRoute.packageDetail(info.slug)),
+              icon: const Icon(Icons.article_outlined, size: 18),
+              label: const Text('Details'),
+            ),
+            TextButton.icon(
+              onPressed: () => openExternalUrl(info.url),
               icon: const Icon(Icons.open_in_new, size: 18),
               label: Text(info.linkLabel),
             ),

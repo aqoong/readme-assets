@@ -189,10 +189,10 @@ class HomeSummarySection extends StatelessWidget {
             ),
             ContentItem(
               icon: Icons.description_outlined,
-              title: 'Developer Guide',
+              title: 'Developer Articles',
               body:
-                  'See practical use cases for readable JSON inspection in API debugging, Firebase checks, and documentation.',
-              route: SiteRoute.guide,
+                  'Read practical Flutter and Android notes about custom keyboards, ripple effects, auto-sized text, and expandable text.',
+              route: SiteRoute.articles,
             ),
           ],
         ),

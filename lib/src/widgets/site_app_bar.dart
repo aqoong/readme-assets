@@ -3,6 +3,7 @@ import 'package:size_tailored_text/size_tailored_text.dart';
 
 import '../routes/navigation.dart';
 import '../routes/site_route.dart';
+import '../utils/open_url.dart';
 
 class SiteAppBar extends StatelessWidget {
   const SiteAppBar({super.key, required this.currentRoute});
@@ -49,10 +50,17 @@ class SiteAppBar extends StatelessWidget {
               const SizedBox(width: 8),
             ]
           : [
+              _NavLink(route: SiteRoute.home, selected: currentRoute),
               _NavLink(route: SiteRoute.packages, selected: currentRoute),
+              _NavLink(route: SiteRoute.tools, selected: currentRoute),
               _NavLink(route: SiteRoute.jsonParser, selected: currentRoute),
-              _NavLink(route: SiteRoute.guide, selected: currentRoute),
+              _NavLink(route: SiteRoute.articles, selected: currentRoute),
               _NavLink(route: SiteRoute.about, selected: currentRoute),
+              IconButton(
+                tooltip: 'Open GitHub',
+                onPressed: () => openExternalUrl('https://github.com/aqoong'),
+                icon: const Icon(Icons.code),
+              ),
               const SizedBox(width: 16),
             ],
     );
@@ -67,9 +75,11 @@ class _CompactNavigationMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const menuRoutes = [
+      SiteRoute.home,
       SiteRoute.packages,
+      SiteRoute.tools,
       SiteRoute.jsonParser,
-      SiteRoute.guide,
+      SiteRoute.articles,
       SiteRoute.about,
     ];
 
@@ -118,23 +128,30 @@ class _NavLink extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isSelected = route == selected;
+    final isSectionSelected =
+        isSelected ||
+        (route == SiteRoute.packages && selected.isPackageSection) ||
+        (route == SiteRoute.tools && selected.isToolsSection) ||
+        (route == SiteRoute.articles && selected.isArticlesSection);
 
     return TextButton(
       onPressed: () => goToRoute(context, route),
       style: TextButton.styleFrom(
-        foregroundColor: isSelected
+        foregroundColor: isSectionSelected
             ? Theme.of(context).colorScheme.primary
             : const Color(0xFF334155),
-        backgroundColor: isSelected ? const Color(0xFFEFF6FF) : null,
+        backgroundColor: isSectionSelected ? const Color(0xFFEFF6FF) : null,
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(999),
           side: BorderSide(
-            color: isSelected ? const Color(0xFFBFDBFE) : Colors.transparent,
+            color: isSectionSelected
+                ? const Color(0xFFBFDBFE)
+                : Colors.transparent,
           ),
         ),
         textStyle: TextStyle(
-          fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+          fontWeight: isSectionSelected ? FontWeight.w800 : FontWeight.w600,
         ),
       ),
       child: SizedBox(
@@ -144,7 +161,7 @@ class _NavLink extends StatelessWidget {
           maxLines: 1,
           minFontSize: 11,
           style: TextStyle(
-            fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+            fontWeight: isSectionSelected ? FontWeight.w800 : FontWeight.w600,
           ),
         ),
       ),

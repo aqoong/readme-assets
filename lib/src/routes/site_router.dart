@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../views/pages/about_page.dart';
-import '../views/pages/guide_page.dart';
+import '../views/pages/article_detail_page.dart';
+import '../views/pages/articles_page.dart';
 import '../views/pages/home_page.dart';
 import '../views/pages/json_parser_page.dart';
+import '../views/pages/not_found_page.dart';
+import '../views/pages/package_detail_page.dart';
 import '../views/pages/packages_page.dart';
 import '../views/pages/privacy_page.dart';
+import '../views/pages/tools_page.dart';
 import '../core/analytics.dart';
 import 'site_route.dart';
 
@@ -73,13 +77,17 @@ class SiteRouterDelegate extends RouterDelegate<SiteRoute>
   }
 
   Widget _pageFor(SiteRoute route) {
-    return switch (route) {
-      SiteRoute.home => const HomePage(),
-      SiteRoute.packages => const PackagesPage(),
-      SiteRoute.jsonParser => const JsonParserPage(),
-      SiteRoute.guide => const GuidePage(),
-      SiteRoute.about => const AboutPage(),
-      SiteRoute.privacy => const PrivacyPage(),
+    return switch (route.kind) {
+      SiteRouteKind.home => const HomePage(),
+      SiteRouteKind.packages => const PackagesPage(),
+      SiteRouteKind.packageDetail => PackageDetailPage(slug: route.slug!),
+      SiteRouteKind.tools => const ToolsPage(),
+      SiteRouteKind.jsonParser => const JsonParserPage(),
+      SiteRouteKind.articles => const ArticlesPage(),
+      SiteRouteKind.articleDetail => ArticleDetailPage(slug: route.slug!),
+      SiteRouteKind.about => const AboutPage(),
+      SiteRouteKind.privacy => const PrivacyPage(),
+      SiteRouteKind.notFound => const NotFoundPage(),
     };
   }
 

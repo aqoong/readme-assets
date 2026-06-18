@@ -11,7 +11,7 @@ class GuidePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const PageScaffold(
-      currentRoute: SiteRoute.guide,
+      currentRoute: SiteRoute.articles,
       children: [GuideSection(), FooterSection()],
     );
   }
