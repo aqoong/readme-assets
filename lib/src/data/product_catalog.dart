@@ -10,6 +10,7 @@ class ProductInfo {
     required this.platforms,
     required this.highlights,
     required this.lastUpdated,
+    this.serviceUrl,
     this.featured = false,
   });
 
@@ -21,6 +22,7 @@ class ProductInfo {
   final List<String> platforms;
   final List<String> highlights;
   final String lastUpdated;
+  final String? serviceUrl;
   final bool featured;
 
   String get statusLabel => switch (status) {
@@ -37,9 +39,10 @@ const products = <ProductInfo>[
     tagline: '가족을 연결하면, 호칭이 보입니다.',
     description: '카드로 가족 관계를 확장하고 나를 기준으로 촌수와 한국식 호칭을 확인하는 가족 관계 트리입니다.',
     status: ProductStatus.inDevelopment,
-    platforms: ['Android', 'iOS', 'Web'],
+    platforms: ['Web'],
     highlights: ['가족 관계 트리', '한국식 호칭', '촌수 계산'],
-    lastUpdated: '2026-08-09',
+    lastUpdated: '2026-08-10',
+    serviceUrl: 'https://famitree.aqoong.pe.kr/',
     featured: true,
   ),
 ];
