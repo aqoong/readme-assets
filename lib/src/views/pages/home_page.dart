@@ -12,7 +12,12 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const PageScaffold(
       currentRoute: SiteRoute.home,
-      children: [HeroSection(), HomeSummarySection(), FooterSection()],
+      children: [
+        HeroSection(),
+        FeaturedProductSection(),
+        HomeSummarySection(),
+        FooterSection(),
+      ],
     );
   }
 }
