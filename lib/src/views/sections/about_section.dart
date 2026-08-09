@@ -27,7 +27,7 @@ class AboutSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 14),
                 const Text(
-                  'The site exists to document those libraries, publish practical Flutter and Android notes, provide small developer tools such as the JSON Parser, and keep the projects discoverable from search engines and GitHub Pages.',
+                  'The site exists to introduce original products such as Famitree, document open-source libraries, publish practical Flutter and Android notes, provide small developer tools such as the JSON Parser, and keep the work discoverable from search engines and GitHub Pages.',
                   style: TextStyle(color: Color(0xFF475569), height: 1.6),
                 ),
                 const SizedBox(height: 14),

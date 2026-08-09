@@ -51,9 +51,9 @@ class SiteAppBar extends StatelessWidget {
             ]
           : [
               _NavLink(route: SiteRoute.home, selected: currentRoute),
+              _NavLink(route: SiteRoute.products, selected: currentRoute),
               _NavLink(route: SiteRoute.packages, selected: currentRoute),
               _NavLink(route: SiteRoute.tools, selected: currentRoute),
-              _NavLink(route: SiteRoute.jsonParser, selected: currentRoute),
               _NavLink(route: SiteRoute.articles, selected: currentRoute),
               _NavLink(route: SiteRoute.about, selected: currentRoute),
               IconButton(
@@ -76,9 +76,9 @@ class _CompactNavigationMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     const menuRoutes = [
       SiteRoute.home,
+      SiteRoute.products,
       SiteRoute.packages,
       SiteRoute.tools,
-      SiteRoute.jsonParser,
       SiteRoute.articles,
       SiteRoute.about,
     ];
@@ -130,6 +130,7 @@ class _NavLink extends StatelessWidget {
     final isSelected = route == selected;
     final isSectionSelected =
         isSelected ||
+        (route == SiteRoute.products && selected.isProductsSection) ||
         (route == SiteRoute.packages && selected.isPackageSection) ||
         (route == SiteRoute.tools && selected.isToolsSection) ||
         (route == SiteRoute.articles && selected.isArticlesSection);

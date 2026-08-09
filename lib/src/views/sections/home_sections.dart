@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../data/product_catalog.dart';
 import '../../routes/navigation.dart';
 import '../../routes/site_route.dart';
 import '../../widgets/common_widgets.dart';
@@ -156,6 +157,135 @@ class _Dot extends StatelessWidget {
       height: 10,
       margin: const EdgeInsets.only(right: 7),
       decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+    );
+  }
+}
+
+class FeaturedProductSection extends StatelessWidget {
+  const FeaturedProductSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final product = products.firstWhere(
+      (item) => item.featured,
+      orElse: () => products.first,
+    );
+
+    return SectionBand(
+      backgroundColor: const Color(0xFFF0FDF4),
+      child: ConstrainedSection(
+        id: 'featured-product',
+        title: 'Featured Product',
+        subtitle: 'AQoong이 만들고 있는 앱과 서비스 중 현재 주목할 제품입니다.',
+        child: Card(
+          clipBehavior: Clip.antiAlias,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final isWide = constraints.maxWidth >= 760;
+              final visual = const _FeaturedProductVisual();
+              final copy = Padding(
+                padding: const EdgeInsets.all(28),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        Tag(label: product.statusLabel),
+                        for (final platform in product.platforms)
+                          Tag(label: platform),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
+                    Text(
+                      product.name,
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.w900),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      product.tagline,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: const Color(0xFF15803D),
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      product.description,
+                      style: const TextStyle(
+                        color: Color(0xFF475569),
+                        height: 1.6,
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    FilledButton.icon(
+                      onPressed: () => goToRoute(
+                        context,
+                        SiteRoute.productDetail(product.slug),
+                      ),
+                      icon: const Icon(Icons.arrow_forward_rounded),
+                      label: Text('${product.name} 알아보기'),
+                    ),
+                  ],
+                ),
+              );
+
+              return isWide
+                  ? IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(flex: 6, child: copy),
+                          const Expanded(
+                            flex: 4,
+                            child: _FeaturedProductVisual(),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [visual, copy],
+                    );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FeaturedProductVisual extends StatelessWidget {
+  const _FeaturedProductVisual();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(minHeight: 240),
+      color: const Color(0xFF0B2E22),
+      child: const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.account_tree_rounded,
+              color: Color(0xFF86EFAC),
+              size: 88,
+            ),
+            SizedBox(height: 18),
+            Text(
+              '나 ↔ 사촌 · 4촌',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -14,7 +14,7 @@ class AQoongApp extends StatelessWidget {
     const seed = Color(0xFF2563EB);
 
     return MaterialApp.router(
-      title: 'AQoong.dev - Flutter & Android Developer Libraries',
+      title: 'AQoong.dev - Products, Flutter & Android Libraries',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,

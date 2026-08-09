@@ -9,6 +9,8 @@ import '../views/pages/not_found_page.dart';
 import '../views/pages/package_detail_page.dart';
 import '../views/pages/packages_page.dart';
 import '../views/pages/privacy_page.dart';
+import '../views/pages/product_detail_page.dart';
+import '../views/pages/products_page.dart';
 import '../views/pages/tools_page.dart';
 import '../core/analytics.dart';
 import 'site_route.dart';
@@ -79,6 +81,8 @@ class SiteRouterDelegate extends RouterDelegate<SiteRoute>
   Widget _pageFor(SiteRoute route) {
     return switch (route.kind) {
       SiteRouteKind.home => const HomePage(),
+      SiteRouteKind.products => const ProductsPage(),
+      SiteRouteKind.productDetail => ProductDetailPage(slug: route.slug!),
       SiteRouteKind.packages => const PackagesPage(),
       SiteRouteKind.packageDetail => PackageDetailPage(slug: route.slug!),
       SiteRouteKind.tools => const ToolsPage(),

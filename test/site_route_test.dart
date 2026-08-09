@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('parses static paths', () {
     expect(SiteRoute.fromPath('/'), SiteRoute.home);
+    expect(SiteRoute.fromPath('/products'), SiteRoute.products);
     expect(SiteRoute.fromPath('/packages'), SiteRoute.packages);
     expect(SiteRoute.fromPath('/tools'), SiteRoute.tools);
     expect(SiteRoute.fromPath('/tools/json-parser'), SiteRoute.jsonParser);
@@ -13,6 +14,10 @@ void main() {
   });
 
   test('parses package and article detail paths', () {
+    expect(
+      SiteRoute.fromPath('/products/famitree'),
+      SiteRoute.productDetail('famitree'),
+    );
     expect(
       SiteRoute.fromPath('/packages/flutter-soft-keyboard'),
       SiteRoute.packageDetail('flutter-soft-keyboard'),
@@ -24,6 +29,7 @@ void main() {
   });
 
   test('restores route objects to URLs', () {
+    expect(SiteRoute.productDetail('famitree').path, '/products/famitree');
     expect(SiteRoute.packageDetail('aqlinter').path, '/packages/aqlinter');
     expect(
       SiteRoute.articleDetail('flutter-auto-resize-text').path,
@@ -33,6 +39,7 @@ void main() {
 
   test('unknown paths become 404', () {
     expect(SiteRoute.fromPath('/missing'), SiteRoute.notFound);
+    expect(SiteRoute.fromPath('/products/not-real'), SiteRoute.notFound);
     expect(SiteRoute.fromPath('/packages/not-real'), SiteRoute.notFound);
   });
 }

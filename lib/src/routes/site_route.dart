@@ -1,8 +1,10 @@
 import '../../package_catalog.dart';
 import '../data/article_catalog.dart';
+import '../data/product_catalog.dart';
 
 abstract final class SitePaths {
   static const home = '/';
+  static const products = '/products';
   static const packages = '/packages';
   static const tools = '/tools';
   static const jsonParser = '/tools/json-parser';
@@ -10,12 +12,15 @@ abstract final class SitePaths {
   static const about = '/about';
   static const privacy = '/privacy';
 
+  static String productDetail(String slug) => '$products/$slug';
   static String packageDetail(String slug) => '$packages/$slug';
   static String articleDetail(String slug) => '$articles/$slug';
 }
 
 enum SiteRouteKind {
   home,
+  products,
+  productDetail,
   packages,
   packageDetail,
   tools,
@@ -31,6 +36,11 @@ class SiteRoute {
   const SiteRoute._(this.kind, this.path, this.label, {this.slug});
 
   static const home = SiteRoute._(SiteRouteKind.home, SitePaths.home, 'Home');
+  static const products = SiteRoute._(
+    SiteRouteKind.products,
+    SitePaths.products,
+    'Products',
+  );
   static const packages = SiteRoute._(
     SiteRouteKind.packages,
     SitePaths.packages,
@@ -67,6 +77,16 @@ class SiteRoute {
     'Page not found',
   );
 
+  factory SiteRoute.productDetail(String slug) {
+    final product = productBySlug(slug);
+    return SiteRoute._(
+      SiteRouteKind.productDetail,
+      SitePaths.productDetail(slug),
+      product?.name ?? slug,
+      slug: slug,
+    );
+  }
+
   factory SiteRoute.packageDetail(String slug) {
     final package = packageBySlug(slug);
     return SiteRoute._(
@@ -92,6 +112,11 @@ class SiteRoute {
   final String label;
   final String? slug;
 
+  bool get isProductsSection {
+    return kind == SiteRouteKind.products ||
+        kind == SiteRouteKind.productDetail;
+  }
+
   bool get isPackageSection {
     return kind == SiteRouteKind.packages ||
         kind == SiteRouteKind.packageDetail;
@@ -112,6 +137,8 @@ class SiteRoute {
     switch (normalized) {
       case SitePaths.home:
         return home;
+      case SitePaths.products:
+        return products;
       case SitePaths.packages:
         return packages;
       case SitePaths.tools:
@@ -129,6 +156,12 @@ class SiteRoute {
     }
 
     final segments = Uri.parse(normalized).pathSegments;
+    if (segments.length == 2 && segments.first == 'products') {
+      final slug = segments.last;
+      return productBySlug(slug) == null
+          ? notFound
+          : SiteRoute.productDetail(slug);
+    }
     if (segments.length == 2 && segments.first == 'packages') {
       final slug = segments.last;
       return packageBySlug(slug) == null

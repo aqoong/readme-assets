@@ -25,9 +25,13 @@ class FooterSection extends StatelessWidget {
               const SizedBox(
                 width: 280,
                 child: Text(
-                  'AQoong.dev shares Flutter packages, Android libraries, and browser-only developer tools from aqoong.pe.kr.',
+                  'AQoong.dev shares original products, Flutter packages, Android libraries, and practical developer tools.',
                   style: TextStyle(color: Colors.white, height: 1.45),
                 ),
+              ),
+              _FooterButton(
+                label: 'Products',
+                onPressed: () => goToRoute(context, SiteRoute.products),
               ),
               _FooterButton(
                 label: 'Flutter packages',
