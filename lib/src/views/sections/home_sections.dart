@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../data/product_catalog.dart';
 import '../../routes/navigation.dart';
 import '../../routes/site_route.dart';
+import '../../utils/open_url.dart';
 import '../../widgets/common_widgets.dart';
 import '../../widgets/content_grid.dart';
 
@@ -221,13 +222,26 @@ class FeaturedProductSection extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 18),
-                    FilledButton.icon(
-                      onPressed: () => goToRoute(
-                        context,
-                        SiteRoute.productDetail(product.slug),
-                      ),
-                      icon: const Icon(Icons.arrow_forward_rounded),
-                      label: Text('${product.name} 알아보기'),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: [
+                        if (product.serviceUrl != null)
+                          FilledButton.icon(
+                            onPressed: () =>
+                                openExternalUrl(product.serviceUrl!),
+                            icon: const Icon(Icons.open_in_new_rounded),
+                            label: Text('${product.name} 시작하기'),
+                          ),
+                        OutlinedButton.icon(
+                          onPressed: () => goToRoute(
+                            context,
+                            SiteRoute.productDetail(product.slug),
+                          ),
+                          icon: const Icon(Icons.article_outlined),
+                          label: const Text('제품 소개'),
+                        ),
+                      ],
                     ),
                   ],
                 ),

@@ -130,15 +130,16 @@ class _HeroCopy extends StatelessWidget {
           spacing: 12,
           runSpacing: 12,
           children: [
-            FilledButton.icon(
-              onPressed: () => openMailTo('cooldnjsdn@gmail.com'),
-              icon: const Icon(Icons.mail_outline_rounded),
-              label: const Text('개발 소식 문의'),
-              style: FilledButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: const Color(0xFF14532D),
+            if (product.serviceUrl != null)
+              FilledButton.icon(
+                onPressed: () => openExternalUrl(product.serviceUrl!),
+                icon: const Icon(Icons.open_in_new_rounded),
+                label: const Text('Famitree 시작하기'),
+                style: FilledButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: const Color(0xFF14532D),
+                ),
               ),
-            ),
             OutlinedButton.icon(
               onPressed: () => goToRoute(context, SiteRoute.products),
               icon: const Icon(Icons.arrow_back_rounded),
@@ -701,7 +702,7 @@ class _DeveloperStorySection extends StatelessWidget {
       child: ConstrainedSection(
         id: 'famitree-built-with',
         title: 'Built as a practical Flutter product',
-        subtitle: '사용자 경험과 함께 여러 플랫폼의 데이터 흐름, 관계 규칙, 오프라인 편집 경계를 설계하고 있습니다.',
+        subtitle: 'Web에서 자연스럽게 관계를 편집하고 호칭을 확인할 수 있는 데이터 흐름과 규칙 경계를 설계하고 있습니다.',
         child: Card(
           color: const Color(0xFF111827),
           child: Padding(
@@ -713,7 +714,7 @@ class _DeveloperStorySection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '하나의 관계 트리, 여러 실행 환경',
+                      'Web에서 이어지는 가족 관계 트리',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w900,
@@ -721,7 +722,7 @@ class _DeveloperStorySection extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                     const Text(
-                      'Flutter 기반의 공통 화면 위에 로컬 편집 경험과 서버 호칭 규칙 조회를 결합해 Android, iOS, Web을 함께 준비하고 있습니다.',
+                      'Flutter Web의 관계 편집 경험과 Firebase 기반 서버 호칭 규칙 조회를 결합해 브라우저에서 바로 사용할 수 있는 서비스를 만들고 있습니다.',
                       style: TextStyle(color: Color(0xFFCBD5E1), height: 1.7),
                     ),
                   ],
@@ -730,11 +731,10 @@ class _DeveloperStorySection extends StatelessWidget {
                   spacing: 10,
                   runSpacing: 10,
                   children: [
-                    _TechChip(label: 'Flutter'),
+                    _TechChip(label: 'Flutter Web'),
                     _TechChip(label: 'Riverpod'),
                     _TechChip(label: 'Firebase'),
                     _TechChip(label: 'Cloud Functions'),
-                    _TechChip(label: 'ObjectBox'),
                   ],
                 );
 
@@ -797,8 +797,8 @@ class _StatusSection extends StatelessWidget {
     return SectionBand(
       child: ConstrainedSection(
         id: 'famitree-status',
-        title: '현재 개발 중입니다',
-        subtitle: 'Famitree는 핵심 가족 트리 편집과 호칭 계산 경험을 다듬고 있는 MVP 단계입니다.',
+        title: 'Web에서 사용할 수 있습니다',
+        subtitle: 'Famitree는 현재 Web MVP로 가족 트리 편집과 호칭 계산 경험을 제공하고 있습니다.',
         child: Card(
           child: Padding(
             padding: const EdgeInsets.all(26),
@@ -816,7 +816,7 @@ class _StatusSection extends StatelessWidget {
                     const SizedBox(height: 18),
                     _StatusLine(
                       icon: Icons.devices_rounded,
-                      title: 'Target platforms',
+                      title: 'Target platform',
                       value: product.platforms.join(' · '),
                     ),
                     const SizedBox(height: 18),
@@ -831,21 +831,29 @@ class _StatusSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Famitree에 관심이 있으신가요?',
+                      '지금 Famitree를 사용해보세요',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w900,
                       ),
                     ),
                     const SizedBox(height: 10),
                     const Text(
-                      '출시 소식, 테스트 참여 또는 제품에 대한 의견을 이메일로 남겨주세요.',
+                      '별도의 설치 없이 Web 브라우저에서 가족 관계 트리를 만들고 호칭과 촌수를 확인할 수 있습니다.',
                       style: TextStyle(color: Color(0xFF475569), height: 1.65),
                     ),
                     const SizedBox(height: 18),
                     FilledButton.icon(
+                      onPressed: product.serviceUrl == null
+                          ? null
+                          : () => openExternalUrl(product.serviceUrl!),
+                      icon: const Icon(Icons.open_in_new_rounded),
+                      label: const Text('Famitree 바로가기'),
+                    ),
+                    const SizedBox(height: 8),
+                    TextButton.icon(
                       onPressed: () => openMailTo('cooldnjsdn@gmail.com'),
                       icon: const Icon(Icons.mail_outline_rounded),
-                      label: const Text('이메일로 문의하기'),
+                      label: const Text('의견 보내기'),
                     ),
                   ],
                 );
