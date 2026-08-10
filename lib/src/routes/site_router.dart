@@ -11,6 +11,7 @@ import '../views/pages/packages_page.dart';
 import '../views/pages/privacy_page.dart';
 import '../views/pages/product_detail_page.dart';
 import '../views/pages/products_page.dart';
+import '../views/pages/qr_code_generator_page.dart';
 import '../views/pages/tools_page.dart';
 import '../core/analytics.dart';
 import 'site_route.dart';
@@ -87,6 +88,7 @@ class SiteRouterDelegate extends RouterDelegate<SiteRoute>
       SiteRouteKind.packageDetail => PackageDetailPage(slug: route.slug!),
       SiteRouteKind.tools => const ToolsPage(),
       SiteRouteKind.jsonParser => const JsonParserPage(),
+      SiteRouteKind.qrCodeGenerator => const QrCodeGeneratorPage(),
       SiteRouteKind.articles => const ArticlesPage(),
       SiteRouteKind.articleDetail => ArticleDetailPage(slug: route.slug!),
       SiteRouteKind.about => const AboutPage(),

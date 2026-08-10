@@ -42,7 +42,7 @@ jobs:
         run: flutter analyze
 
       - name: Build web
-        run: flutter build web --release
+        run: flutter build web --release --dart-define=ADSENSE_TOOL_SLOT=${{ vars.ADSENSE_TOOL_SLOT || '2597340767' }}
 
       - name: Preserve custom domain and ads.txt
         run: |
