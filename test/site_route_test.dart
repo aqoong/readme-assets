@@ -8,6 +8,11 @@ void main() {
     expect(SiteRoute.fromPath('/packages'), SiteRoute.packages);
     expect(SiteRoute.fromPath('/tools'), SiteRoute.tools);
     expect(SiteRoute.fromPath('/tools/json-parser'), SiteRoute.jsonParser);
+    expect(
+      SiteRoute.fromPath('/tools/qr-code-generator'),
+      SiteRoute.qrCodeGenerator,
+    );
+    expect(SiteRoute.fromPath('/qr-code-generator'), SiteRoute.qrCodeGenerator);
     expect(SiteRoute.fromPath('/articles'), SiteRoute.articles);
     expect(SiteRoute.fromPath('/about'), SiteRoute.about);
     expect(SiteRoute.fromPath('/privacy'), SiteRoute.privacy);

@@ -8,6 +8,7 @@ abstract final class SitePaths {
   static const packages = '/packages';
   static const tools = '/tools';
   static const jsonParser = '/tools/json-parser';
+  static const qrCodeGenerator = '/tools/qr-code-generator';
   static const articles = '/articles';
   static const about = '/about';
   static const privacy = '/privacy';
@@ -25,6 +26,7 @@ enum SiteRouteKind {
   packageDetail,
   tools,
   jsonParser,
+  qrCodeGenerator,
   articles,
   articleDetail,
   about,
@@ -55,6 +57,11 @@ class SiteRoute {
     SiteRouteKind.jsonParser,
     SitePaths.jsonParser,
     'JSON Parser',
+  );
+  static const qrCodeGenerator = SiteRoute._(
+    SiteRouteKind.qrCodeGenerator,
+    SitePaths.qrCodeGenerator,
+    'QR Code Generator',
   );
   static const articles = SiteRoute._(
     SiteRouteKind.articles,
@@ -123,7 +130,9 @@ class SiteRoute {
   }
 
   bool get isToolsSection {
-    return kind == SiteRouteKind.tools || kind == SiteRouteKind.jsonParser;
+    return kind == SiteRouteKind.tools ||
+        kind == SiteRouteKind.jsonParser ||
+        kind == SiteRouteKind.qrCodeGenerator;
   }
 
   bool get isArticlesSection {
@@ -146,6 +155,9 @@ class SiteRoute {
       case SitePaths.jsonParser:
       case '/json-parser':
         return jsonParser;
+      case SitePaths.qrCodeGenerator:
+      case '/qr-code-generator':
+        return qrCodeGenerator;
       case SitePaths.articles:
       case '/guide':
         return articles;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../viewmodels/json_parser_view_model.dart';
+import '../../widgets/adsense_banner.dart';
 import '../../widgets/common_widgets.dart';
 
 class JsonParserSection extends StatefulWidget {
@@ -78,6 +79,8 @@ class _JsonParserSectionState extends State<JsonParserSection> {
                     );
                   },
                 ),
+                const SizedBox(height: 26),
+                const AdSenseBanner(placement: 'json-parser'),
                 const SizedBox(height: 26),
                 const _JsonParserGuide(),
               ],
