@@ -25,9 +25,21 @@ class ToolsPage extends StatelessWidget {
               builder: (context, constraints) {
                 const cards = [
                   _ToolCard(
+                    title: 'IP Address',
+                    description:
+                        'Check the public IPv4 or IPv6 address and any local network addresses your browser makes available.',
+                    privacyNote:
+                        'Public addresses are requested from ipify; local discovery runs in the browser.',
+                    icon: Icons.language_outlined,
+                    buttonLabel: 'Check IP Address',
+                    route: SiteRoute.ipAddress,
+                  ),
+                  _ToolCard(
                     title: 'JSON Parser',
                     description:
                         'Validate, pretty print, minify, copy, download, and inspect nested JSON as typed blocks.',
+                    privacyNote:
+                        'Input is processed in the browser and is not sent to a server.',
                     icon: Icons.account_tree_outlined,
                     buttonLabel: 'Open JSON Parser',
                     route: SiteRoute.jsonParser,
@@ -36,24 +48,28 @@ class ToolsPage extends StatelessWidget {
                     title: 'QR Code Generator',
                     description:
                         'Create downloadable QR images for URLs, text, email, phone, SMS, contacts, locations, and Wi-Fi.',
+                    privacyNote:
+                        'Input is processed in the browser and is not sent to a server.',
                     icon: Icons.qr_code_2,
                     buttonLabel: 'Open QR Generator',
                     route: SiteRoute.qrCodeGenerator,
                   ),
                 ];
 
-                if (constraints.maxWidth >= 780) {
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(child: cards[0]),
-                      const SizedBox(width: 18),
-                      Expanded(child: cards[1]),
-                    ],
-                  );
-                }
-                return Column(
-                  children: [cards[0], const SizedBox(height: 18), cards[1]],
+                final columns = constraints.maxWidth >= 1000
+                    ? 3
+                    : constraints.maxWidth >= 660
+                    ? 2
+                    : 1;
+                final cardWidth =
+                    (constraints.maxWidth - (columns - 1) * 18) / columns;
+                return Wrap(
+                  spacing: 18,
+                  runSpacing: 18,
+                  children: [
+                    for (final card in cards)
+                      SizedBox(width: cardWidth, child: card),
+                  ],
                 );
               },
             ),
@@ -69,6 +85,7 @@ class _ToolCard extends StatelessWidget {
   const _ToolCard({
     required this.title,
     required this.description,
+    required this.privacyNote,
     required this.icon,
     required this.buttonLabel,
     required this.route,
@@ -76,6 +93,7 @@ class _ToolCard extends StatelessWidget {
 
   final String title;
   final String description;
+  final String privacyNote;
   final IconData icon;
   final String buttonLabel;
   final SiteRoute route;
@@ -107,7 +125,7 @@ class _ToolCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              '$description Input is processed in the browser and is not sent to a server.',
+              '$description $privacyNote',
               style: const TextStyle(color: Color(0xFF475569), height: 1.55),
             ),
             const SizedBox(height: 16),

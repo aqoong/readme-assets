@@ -35,6 +35,11 @@ class PrivacySection extends StatelessWidget {
                       'JSON pasted into the JSON Parser is processed in the client browser for validation, formatting, minifying, copying, and visualization. The tool is designed not to send the entered JSON to a server, but visitors should still avoid pasting secrets or private customer data into browser tools.',
                 ),
                 _PolicyItem(
+                  title: 'IP address tool',
+                  body:
+                      'The IP address tool requests public IPv4 and IPv6 addresses from the ipify API. Local network address discovery runs in the browser through WebRTC and may be restricted by browser privacy protections. AQoong does not submit the displayed addresses to its own application server.',
+                ),
+                _PolicyItem(
                   title: 'External links',
                   body:
                       'Pages link to GitHub, pub.dev, a technical blog, and other developer resources. External websites have their own privacy policies and content practices.',

@@ -4,6 +4,7 @@ import '../views/pages/about_page.dart';
 import '../views/pages/article_detail_page.dart';
 import '../views/pages/articles_page.dart';
 import '../views/pages/home_page.dart';
+import '../views/pages/ip_address_page.dart';
 import '../views/pages/json_parser_page.dart';
 import '../views/pages/not_found_page.dart';
 import '../views/pages/package_detail_page.dart';
@@ -87,6 +88,7 @@ class SiteRouterDelegate extends RouterDelegate<SiteRoute>
       SiteRouteKind.packages => const PackagesPage(),
       SiteRouteKind.packageDetail => PackageDetailPage(slug: route.slug!),
       SiteRouteKind.tools => const ToolsPage(),
+      SiteRouteKind.ipAddress => const IpAddressPage(),
       SiteRouteKind.jsonParser => const JsonParserPage(),
       SiteRouteKind.qrCodeGenerator => const QrCodeGeneratorPage(),
       SiteRouteKind.articles => const ArticlesPage(),
