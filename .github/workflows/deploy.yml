@@ -79,6 +79,7 @@ jobs:
         run: |
           cp CNAME build/web/CNAME
           cp ads.txt build/web/ads.txt
+          cp build/web/index.html build/web/404.html
 
       - name: Deploy to gh-pages branch
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
