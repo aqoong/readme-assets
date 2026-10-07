@@ -1,1 +1,86 @@
-{"schemaVersion":1,"articles":[]}
+{
+  "schemaVersion": 1,
+  "articles": [
+    {
+      "schemaVersion": 1,
+      "slug": "issue-b2dc2b653a12897fd5eb8842e6d8de35",
+      "revision": "1339451fb1bf93c77516896d8df180ae41e5985b6be17e5a29aed62cac92a400",
+      "title": "PraisonAI AgentMail: 서명 없는 이벤트로 에이전트 실행 가능",
+      "summary": "공식 권고의 공개 정보입니다. CVE-2026-61436, GHSA-7c92-x8vg-4258. 해당 제품·버전과 조치는 원문을 확인하세요.",
+      "identifiers": [
+        "CVE-2026-61436",
+        "GHSA-7c92-x8vg-4258"
+      ],
+      "affected": [
+        "pip:praisonai:<= 4.6.77"
+      ],
+      "exploitation": "현재 수집한 공식 출처의 악용 근거 미확인. 악용이 없다는 뜻은 아닙니다.",
+      "actions": [
+        "pip:praisonai@4.6.78"
+      ],
+      "sources": [
+        {
+          "title": "GitHub Advisory GHSA-7c92-x8vg-4258",
+          "url": "https://github.com/advisories/GHSA-7c92-x8vg-4258"
+        }
+      ],
+      "publishedAt": "2026-10-07T14:07:10.000Z",
+      "updatedAt": "2026-10-07T14:07:11.000Z",
+      "corrections": []
+    },
+    {
+      "schemaVersion": 1,
+      "slug": "issue-a097326480ddb821440a8e69e37c25b2",
+      "revision": "d482cde8e7f0b73d6599a89b12662fe9b8da8b858f6f2f058c050190a44c8326",
+      "title": "PraisonAI AgentMail: 웹훅 서명 검증 누락으로 메시지 위조 가능",
+      "summary": "공식 권고의 공개 정보입니다. CVE-2026-61428, GHSA-qj9c-59p6-8cgx. 해당 제품·버전과 조치는 원문을 확인하세요.",
+      "identifiers": [
+        "CVE-2026-61428",
+        "GHSA-qj9c-59p6-8cgx"
+      ],
+      "affected": [
+        "pip:praisonai:<= 4.6.77"
+      ],
+      "exploitation": "현재 수집한 공식 출처의 악용 근거 미확인. 악용이 없다는 뜻은 아닙니다.",
+      "actions": [
+        "pip:praisonai@4.6.78"
+      ],
+      "sources": [
+        {
+          "title": "GitHub Advisory GHSA-qj9c-59p6-8cgx",
+          "url": "https://github.com/advisories/GHSA-qj9c-59p6-8cgx"
+        }
+      ],
+      "publishedAt": "2026-10-07T14:06:56.000Z",
+      "updatedAt": "2026-10-07T14:06:56.000Z",
+      "corrections": []
+    },
+    {
+      "schemaVersion": 1,
+      "slug": "issue-df7aedd0af37e1d68ec03d37defda510",
+      "revision": "663315611891328e4d1156dc5e1291f47858218a1a87e4bec2b5348b83b2d6c2",
+      "title": "Actual Sync Server: 프록시 허용 목록 우회로 비공개 저장소 노출 가능",
+      "summary": "공식 권고의 공개 정보입니다. CVE-2026-57449, GHSA-m62c-5q34-f3cf. 해당 제품·버전과 조치는 원문을 확인하세요.",
+      "identifiers": [
+        "CVE-2026-57449",
+        "GHSA-m62c-5q34-f3cf"
+      ],
+      "affected": [
+        "npm:@actual-app/sync-server:<= 26.6.0"
+      ],
+      "exploitation": "현재 수집한 공식 출처의 악용 근거 미확인. 악용이 없다는 뜻은 아닙니다.",
+      "actions": [
+        "npm:@actual-app/sync-server@26.7.0"
+      ],
+      "sources": [
+        {
+          "title": "GitHub Advisory GHSA-m62c-5q34-f3cf",
+          "url": "https://github.com/advisories/GHSA-m62c-5q34-f3cf"
+        }
+      ],
+      "publishedAt": "2026-10-07T14:00:45.000Z",
+      "updatedAt": "2026-10-07T14:00:47.000Z",
+      "corrections": []
+    }
+  ]
+}

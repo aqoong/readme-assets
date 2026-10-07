@@ -1,4 +1,5 @@
 name: Deploy Flutter Web to GitHub Pages
+run-name: deploy-pages [prod]
 
 on:
   push:
