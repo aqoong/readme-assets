@@ -81,6 +81,16 @@ jobs:
           cp CNAME build/web/CNAME
           cp ads.txt build/web/ads.txt
           cp build/web/index.html build/web/404.html
+          node --input-type=module <<'NODE_ROUTES'
+          import {readFileSync,mkdirSync,copyFileSync} from 'node:fs';
+          const feed=JSON.parse(readFileSync('assets/security/articles.json','utf8'));
+          const slugs=feed.articles.map(article=>article.slug);
+          if(new Set(slugs).size!==slugs.length||slugs.some(slug=>typeof slug!=='string'||!/^[a-z0-9][a-z0-9-]{0,100}$/.test(slug)))throw new Error('Invalid security routes');
+          for(const route of ['security',...slugs.map(slug=>'security/'+slug)]){
+            mkdirSync('build/web/'+route,{recursive:true});
+            copyFileSync('build/web/index.html','build/web/'+route+'/index.html');
+          }
+          NODE_ROUTES
 
       - name: Deploy to gh-pages branch
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
