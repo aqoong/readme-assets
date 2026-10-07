@@ -1,4 +1,5 @@
 name: Deploy Flutter Web to GitHub Pages
+run-name: deploy-pages [prod]
 
 on:
   push:
@@ -11,6 +12,7 @@ on:
 
 permissions:
   contents: write
+  id-token: write
 
 concurrency:
   group: pages
@@ -28,6 +30,28 @@ jobs:
           git fetch --depth 1 origin ${GITHUB_SHA}
           git checkout FETCH_HEAD
 
+      - name: Security tools
+        if: vars.SECURITY_TOOLS_REPOSITORY != '' && github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: ${{ vars.SECURITY_TOOLS_REPOSITORY }}
+          ref: ${{ vars.SECURITY_TOOLS_REF }}
+          path: .security-tools
+          persist-credentials: false
+      - name: Prevent stale deployment
+        if: vars.SECURITY_TOOLS_REPOSITORY != '' && github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_WORKFLOW_FILE: deploy.yml
+          DEPLOY_ENVIRONMENT: prod
+          DEPLOY_STEP_NAME: Deploy to gh-pages branch
+          TOOLS_SHA: ${{ vars.SECURITY_TOOLS_REF }}
+        run: |
+          [[ "$TOOLS_SHA" =~ ^[a-f0-9]{40}$ ]]
+          npm --prefix .security-tools/functions ci --ignore-scripts
+          npm --prefix .security-tools/functions run build
+          node .security-tools/scripts/ci-inventory.mjs guard
+
       - name: Set up Flutter
         run: |
           git clone https://github.com/flutter/flutter.git --depth 1 -b stable $HOME/flutter
@@ -44,10 +68,19 @@ jobs:
       - name: Build web
         run: flutter build web --release --dart-define=ADSENSE_TOOL_SLOT=${{ vars.ADSENSE_TOOL_SLOT || '2597340767' }}
 
+      - name: Record actual build manifest
+        run: |
+          flutter --version --machine > build/web/toolchain.json
+          node --input-type=module <<'NODE_MANIFEST'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          const e=process.env;writeFileSync('build/web/deployment.json',JSON.stringify({commit:e.GITHUB_SHA,runId:e.GITHUB_RUN_ID,run:Number(e.GITHUB_RUN_NUMBER),attempt:Number(e.GITHUB_RUN_ATTEMPT),toolchain:JSON.parse(readFileSync('build/web/toolchain.json'))}));
+          NODE_MANIFEST
+
       - name: Preserve custom domain and ads.txt
         run: |
           cp CNAME build/web/CNAME
           cp ads.txt build/web/ads.txt
+          cp build/web/index.html build/web/404.html
 
       - name: Deploy to gh-pages branch
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
@@ -61,3 +94,23 @@ jobs:
           git branch -M gh-pages
           git remote add origin https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git
           git push --force origin gh-pages
+
+      - name: Verify active Pages build
+        if: vars.SECURITY_TOOLS_REPOSITORY != '' && github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        run: |
+          node --input-type=module <<'NODE_VERIFY'
+          const e=process.env;let verified=false;
+          for(let i=0;i<60;i++){try{const r=await fetch('https://aqoong.pe.kr/deployment.json?run='+e.GITHUB_RUN_ID,{signal:AbortSignal.timeout(10000)});const m=await r.json();if(m.commit===e.GITHUB_SHA&&m.runId===e.GITHUB_RUN_ID){verified=true;break;}}catch{}await new Promise(r=>setTimeout(r,15000));}
+          if(!verified)throw new Error('Pages revision not active; inventory remains unchanged');
+          NODE_VERIFY
+      - name: Register security inventory
+        if: vars.SECURITY_TOOLS_REPOSITORY != '' && github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: ./.security-tools/.github/actions/report-inventory
+        with:
+          project-id: homepage
+          environment: prod
+          kind: deployed-app
+          lockfile: pubspec.lock
+          endpoint: ${{ vars.SECURITY_INVENTORY_ENDPOINT }}
+          provider: ${{ vars.SECURITY_WIF_PROVIDER }}
+          service-account: ${{ vars.SECURITY_INGEST_SERVICE_ACCOUNT }}

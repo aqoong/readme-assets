@@ -11,6 +11,7 @@ abstract final class SitePaths {
   static const jsonParser = '/tools/json-parser';
   static const qrCodeGenerator = '/tools/qr-code-generator';
   static const articles = '/articles';
+  static const security = '/security';
   static const about = '/about';
   static const privacy = '/privacy';
 
@@ -31,6 +32,8 @@ enum SiteRouteKind {
   qrCodeGenerator,
   articles,
   articleDetail,
+  security,
+  securityDetail,
   about,
   privacy,
   notFound,
@@ -79,6 +82,17 @@ class SiteRoute {
     SiteRouteKind.about,
     SitePaths.about,
     'About',
+  );
+  static const security = SiteRoute._(
+    SiteRouteKind.security,
+    SitePaths.security,
+    '보안 소식',
+  );
+  factory SiteRoute.securityDetail(String slug) => SiteRoute._(
+    SiteRouteKind.securityDetail,
+    '${SitePaths.security}/$slug',
+    '보안 소식',
+    slug: slug,
   );
   static const privacy = SiteRoute._(
     SiteRouteKind.privacy,
@@ -145,7 +159,9 @@ class SiteRoute {
 
   bool get isArticlesSection {
     return kind == SiteRouteKind.articles ||
-        kind == SiteRouteKind.articleDetail;
+        kind == SiteRouteKind.articleDetail ||
+        kind == SiteRouteKind.security ||
+        kind == SiteRouteKind.securityDetail;
   }
 
   static SiteRoute fromPath(String? path) {
@@ -172,6 +188,8 @@ class SiteRoute {
       case SitePaths.articles:
       case '/guide':
         return articles;
+      case SitePaths.security:
+        return security;
       case SitePaths.about:
         return about;
       case SitePaths.privacy:
@@ -179,6 +197,11 @@ class SiteRoute {
     }
 
     final segments = Uri.parse(normalized).pathSegments;
+    if (segments.length == 2 &&
+        segments.first == 'security' &&
+        RegExp(r'^[a-z0-9][a-z0-9-]{0,100}$').hasMatch(segments.last)) {
+      return SiteRoute.securityDetail(segments.last);
+    }
     if (segments.length == 2 && segments.first == 'products') {
       final slug = segments.last;
       return productBySlug(slug) == null

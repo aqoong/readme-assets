@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../views/pages/about_page.dart';
 import '../views/pages/article_detail_page.dart';
 import '../views/pages/articles_page.dart';
+import '../views/pages/security_news_page.dart';
 import '../views/pages/home_page.dart';
 import '../views/pages/ip_address_page.dart';
 import '../views/pages/json_parser_page.dart';
@@ -93,6 +94,8 @@ class SiteRouterDelegate extends RouterDelegate<SiteRoute>
       SiteRouteKind.qrCodeGenerator => const QrCodeGeneratorPage(),
       SiteRouteKind.articles => const ArticlesPage(),
       SiteRouteKind.articleDetail => ArticleDetailPage(slug: route.slug!),
+      SiteRouteKind.security => const SecurityNewsPage(),
+      SiteRouteKind.securityDetail => SecurityNewsPage(slug: route.slug!),
       SiteRouteKind.about => const AboutPage(),
       SiteRouteKind.privacy => const PrivacyPage(),
       SiteRouteKind.notFound => const NotFoundPage(),

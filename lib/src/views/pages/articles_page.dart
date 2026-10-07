@@ -15,6 +15,14 @@ class ArticlesPage extends StatelessWidget {
     return PageScaffold(
       currentRoute: SiteRoute.articles,
       children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+          child: FilledButton.icon(
+            onPressed: () => goToRoute(context, SiteRoute.security),
+            icon: const Icon(Icons.shield_outlined),
+            label: const Text('보안 소식'),
+          ),
+        ),
         SectionBand(
           backgroundColor: const Color(0xFFF8FAFC),
           child: ConstrainedSection(
