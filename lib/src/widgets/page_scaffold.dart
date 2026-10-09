@@ -11,6 +11,8 @@ class PageScaffold extends StatelessWidget {
   });
 
   final SiteRoute currentRoute;
+
+  /// Page sections followed by the footer as the last child.
   final List<Widget> children;
 
   @override
@@ -20,7 +22,20 @@ class PageScaffold extends StatelessWidget {
         child: CustomScrollView(
           slivers: [
             SiteAppBar(currentRoute: currentRoute),
-            SliverToBoxAdapter(child: Column(children: children)),
+            if (children.isNotEmpty) ...[
+              SliverToBoxAdapter(
+                child: Column(
+                  children: children.take(children.length - 1).toList(),
+                ),
+              ),
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [children.last],
+                ),
+              ),
+            ],
           ],
         ),
       ),
